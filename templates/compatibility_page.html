@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compatibility Check</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .component-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .component-item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            width: 200px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .component-item img {
+            max-width: 100%;
+            height: auto;
+        }
+        .component-item.active {
+            border: 2px solid #007BFF;
+            background-color: #f0f8ff;
+        }
+        .selected-component {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>PC Component Compatibility</h1>
+
+    <!-- CPU Selection -->
+    <div>
+        <h2>Select a CPU</h2>
+        <div id="cpu-list" class="component-list">
+            {% for cpu in cpus %}
+                <div class="component-item" data-id="{{ cpu.id }}" data-type="cpu">
+                    <img src="{{ cpu.cpu_image.url }}" alt="{{ cpu.cpu_name }}">
+                    <h3>{{ cpu.cpu_name }}</h3>
+                    <p>Socket: {{ cpu.cpu_socket }}</p>
+                    <p>Clock speed: {{ cpu.cpu_clock_speed }}</p>
+                    <p>Price: {{ cpu.cpu_price }}</p>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="selected-component">
+            <h3>Selected CPU: <span id="selected-cpu">None</span></h3>
+        </div>
+    </div>
+
+    <!-- Motherboard Selection -->
+    <div>
+        <h2>Select a Motherboard</h2>
+        <div id="motherboard-list" class="component-list">
+            {% for motherboard in motherboards %}
+                <div class="component-item" data-id="{{ motherboard.id }}" data-type="motherboard">
+                    <img src="{{ motherboard.motherboard_image.url }}" alt="{{ motherboard.motherboard_name }}">
+                    <h3>{{ motherboard.motherboard_name }}</h3>
+                    <p>Socket: {{ motherboard.motherboard_socket }}</p>
+                    <p>Chipset: {{ motherboard.motherboard_chipset }}</p>
+                    <p>Price: {{ motherboard.motherboard_price }}</p>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="selected-component">
+            <h3>Selected Motherboard: <span id="selected-motherboard">None</span></h3>
+        </div>
+    </div>
+
+    <!-- RAM Selection -->
+    <div>
+        <h2>Select RAM</h2>
+        <div id="ram-list" class="component-list">
+            {% for ram in ram_modules %}
+                <div class="component-item" data-id="{{ ram.id }}" data-type="ram">
+                    <img src="{{ ram.ram_image.url }}" alt="{{ ram.ram_name }}">
+                    <h3>{{ ram.ram_name }}</h3>
+                    <p>Type: {{ ram.ram_type }}</p>
+                    <p>Capacity: {{ ram.ram_size }}</p>
+                    <p>Clock speed: {{ ram.ram_clock_speed }}</p>
+                    <p>Price: {{ ram.ram_price }}</p>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="selected-component">
+            <h3>Selected RAM: <span id="selected-ram">None</span></h3>
+        </div>
+    </div>
+
+    <script>
+        let selectedCPU = null;
+        let selectedMotherboard = null;
+        let selectedRAM = null;
+    
+        function fetchComponents() {
+            const url = '{% url "get_compatible_components" %}';
+            const data = {
+                cpu_id: selectedCPU,
+                motherboard_id: selectedMotherboard,
+                ram_id: selectedRAM,
+            };
+    
+            $.ajax({
+                url: url,
+                data: data,
+                success: function (response) {
+                    updateComponentList('cpu', response.cpus);
+                    updateComponentList('motherboard', response.motherboards);
+                    updateComponentList('ram', response.ram);
+                },
+            });
+        }
+    
+        function updateComponentList(type, components) {
+            const listContainer = type === 'cpu' ? $('#cpu-list') : 
+                                  type === 'motherboard' ? $('#motherboard-list') : 
+                                  $('#ram-list');
+            const selectedComponentText = type === 'cpu' ? $('#selected-cpu') : 
+                                          type === 'motherboard' ? $('#selected-motherboard') : 
+                                          $('#selected-ram');
+    
+            listContainer.empty();
+    
+            // If there are no compatible items, show a message
+            if (components.length === 0) {
+                listContainer.append('<p>No compatible items found.</p>');
+                return;
+            }
+    
+            // Add compatible or selected items
+            components.forEach((item) => {
+                const isActive = 
+                    (type === 'cpu' && item.id === selectedCPU) ||
+                    (type === 'motherboard' && item.id === selectedMotherboard) ||
+                    (type === 'ram' && item.id === selectedRAM);
+    
+                const html = `
+                    <div class="component-item ${isActive ? 'active' : ''}" data-id="${item.id}" data-type="${type}">
+                        <img src="${item.image_url}" alt="${item.name}">
+                        <h3>${item.name}</h3>
+                        <p>${type === 'ram' ? 'Type: ' + item.type : 'Socket: ' + item.socket}</p>
+                        <p>Price: ${item.price}</p>
+                    </div>
+                `;
+                listContainer.append(html);
+            });
+    
+            // Update the selected component text
+            const selectedItem = 
+                type === 'cpu' ? components.find(item => item.id === selectedCPU) :
+                type === 'motherboard' ? components.find(item => item.id === selectedMotherboard) :
+                components.find(item => item.id === selectedRAM);
+    
+            selectedComponentText.text(selectedItem ? selectedItem.name : 'None');
+        }
+    
+        function selectComponent(element, type) {
+            const id = $(element).data('id');
+    
+            // Toggle selection
+            if ($(element).hasClass('active')) {
+                $(element).removeClass('active');
+                if (type === 'cpu') {
+                    selectedCPU = null;
+                } else if (type === 'motherboard') {
+                    selectedMotherboard = null;
+                } else {
+                    selectedRAM = null;
+                }
+            } else {
+                $(element).siblings().removeClass('active');
+                $(element).addClass('active');
+                if (type === 'cpu') {
+                    selectedCPU = id;
+                } else if (type === 'motherboard') {
+                    selectedMotherboard = id;
+                } else {
+                    selectedRAM = id;
+                }
+            }
+    
+            fetchComponents(); // Fetch compatible components based on selection
+        }
+    
+        $(document).on('click', '.component-item', function () {
+            const type = $(this).data('type');
+            selectComponent(this, type);
+        });
+    
+        $(document).ready(function () {
+            fetchComponents();
+        });
+    </script>
+</body>
+</html>
