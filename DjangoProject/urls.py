@@ -19,16 +19,18 @@ from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
 from items.views import compatibility_page, get_compatible_components, fetch_all_cpus, fetch_all_motherboards, \
-        fetch_all_rams
+        fetch_all_rams, fetch_all_cooling_systems, fetch_all_gpus, fetch_all_power_supplies
 
 urlpatterns = [
         path('admin/', admin.site.urls),
         path('compatibility/', compatibility_page, name='compatibility_page'),
         path('get_compatible_components/', get_compatible_components, name='get_compatible_components'),
-        path('fetch-all-cpus/', fetch_all_cpus, name='fetch_all_cpus'),
-        path('fetch-all-motherboards/', fetch_all_motherboards, name='fetch_all_motherboards'),
-        path('fetch-all-rams/', fetch_all_rams, name='fetch_all_rams'),
-
+        path('fetch_all_cpus/', fetch_all_cpus, name='fetch_all_cpus'),
+        path('fetch_all_motherboards/', fetch_all_motherboards, name='fetch_all_motherboards'),
+        path('fetch_all_rams/', fetch_all_rams, name='fetch_all_rams'),
+        path('fetch_all_cooling_systems', fetch_all_cooling_systems, name='fetch_all_cooling_systems'),
+        path('fetch_all_gpus', fetch_all_gpus, name='fetch_all_gpus'),
+        path('fetch_all_power_supplies/', fetch_all_power_supplies, name='fetch_all_power_supplies'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
