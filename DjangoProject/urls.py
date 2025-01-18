@@ -19,7 +19,8 @@ from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
 from items.views import compatibility_page, get_compatible_components, fetch_all_cpus, fetch_all_motherboards, \
-        fetch_all_rams, fetch_all_cooling_systems, fetch_all_gpus, fetch_all_power_supplies
+        fetch_all_rams, fetch_all_cooling_systems, fetch_all_gpus, fetch_all_power_supplies, fetch_all_cases, \
+        fetch_all_storages
 
 urlpatterns = [
         path('admin/', admin.site.urls),
@@ -31,6 +32,8 @@ urlpatterns = [
         path('fetch_all_cooling_systems', fetch_all_cooling_systems, name='fetch_all_cooling_systems'),
         path('fetch_all_gpus', fetch_all_gpus, name='fetch_all_gpus'),
         path('fetch_all_power_supplies/', fetch_all_power_supplies, name='fetch_all_power_supplies'),
+        path('fetch_all_cases/', fetch_all_cases, name='fetch_all_cases'),
+        path('fetch_all_storages/', fetch_all_storages, name='fetch_all_storages'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

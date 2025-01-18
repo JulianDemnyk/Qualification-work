@@ -12,7 +12,7 @@
             gap: 10px;
         }
         .component-item {
-            border: 1px solid #ccc;
+            border: 1px solid #dadada;
             padding: 10px;
             width: 200px;
             cursor: pointer;
@@ -24,7 +24,7 @@
         }
         .component-item.active {
             border: 2px solid #007BFF;
-            background-color: #f0f8ff;
+            background-color: #dadada;
         }
         .selected-component {
             margin-top: 20px;
@@ -147,6 +147,44 @@
         </div>
     </div>
 
+    <!-- Storage Selection -->
+    <div>
+        <h2>Select a Storage</h2>
+        <div id="storage-list" class="component-list">
+            {% for storage in storages %}
+                <div class="component-item" data-id="{{ storage.id }}" data-type="storage">
+                    <img src="{{ storage.storage_image.url }}" alt="{{ storage.storage_name }}">
+                    <h3>{{ storage.storage_name }}</h3>
+                    <p>Type: {{ storage.storage_type }}</p>
+                    <p>Capacity: {{ storage.storage_capacity }} GB</p>
+                    <p>Price: {{ storage.storage_price }}</p>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="selected-component">
+            <h3>Selected Storage: <span id="selected-storage">None</span></h3>
+        </div>
+    </div>
+
+    <!-- Case Selection -->
+    <div>
+        <h2>Select a Case</h2>
+        <div id="case-list" class="component-list">
+            {% for case in cases %}
+                <div class="component-item" data-id="{{ case.id }}" data-type="case">
+                    <img src="{{ case.case_image.url }}" alt="{{ case.case_name }}">
+                    <h3>{{ case.case_name }}</h3>
+                    <p>Form factor: {{ case.case_form_factor }}</p>
+                    <p>Fan placement: {{ case.case_fan_placement }}</p>
+                    <p>Price: {{ case.case_price }}</p>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="selected-component">
+            <h3>Selected Case: <span id="selected-case">None</span></h3>
+        </div>
+    </div>
+
     <script>
         let selectedCPU = null;
         let selectedMotherboard = null;
@@ -154,8 +192,10 @@
         let selectedCoolingSystem = null;
         let selectedGPU = null;
         let selectedPowerSupply = null;
+        let selectedStorage = null;
+        let selectedCase = null;
 
-        function fetchComponents() {
+                function fetchComponents() {
             const url = '{% url "get_compatible_components" %}';
             const data = {
                 cpu_id: selectedCPU,
@@ -164,6 +204,8 @@
                 cooling_system_id: selectedCoolingSystem,
                 gpu_id: selectedGPU,
                 power_supply_id: selectedPowerSupply,
+                storage_id: selectedStorage,
+                case_id: selectedCase // Make sure this is included
             };
 
             $.ajax({
@@ -171,11 +213,13 @@
                 data: data,
                 success: function (response) {
                     updateComponentList('cpu', response.cpus);
-                    updateComponentList('motherboard', response.motherboards);
+                    updateComponentList('motherboard', response.motherboards); // Ensure this is updated
                     updateComponentList('ram', response.ram);
                     updateComponentList('cooling_system', response.cooling_systems);
                     updateComponentList('gpu', response.gpus);
                     updateComponentList('power_supply', response.power_supply);
+                    updateComponentList('storage', response.storages);
+                    updateComponentList('case', response.cases);
                 },
             });
         }
@@ -186,13 +230,17 @@
                                   type === 'ram' ? $('#ram-list') :
                                   type === 'cooling_system' ? $('#cooling-system-list') :
                                   type === 'gpu' ? $('#gpu-list') :
-                                  $('#power-supply-list');
+                                  type === 'power_supply' ? $('#power-supply-list') :
+                                  type === 'storage' ? $('#storage-list') :
+                                  $('#case-list');
             const selectedComponentText = type === 'cpu' ? $('#selected-cpu') :
                                           type === 'motherboard' ? $('#selected-motherboard') :
                                           type === 'ram' ? $('#selected-ram') :
                                           type === 'cooling_system' ? $('#selected-cooling-system') :
                                           type === 'gpu' ? $('#selected-gpu') :
-                                          $('#selected-power-supply');
+                                          type === 'power_supply' ? $('#selected-power-supply') :
+                                          type === 'storage' ? $('#selected-storage') :
+                                          $('#selected-case');
 
             listContainer.empty();
 
@@ -210,7 +258,9 @@
                     (type === 'ram' && item.id === selectedRAM) ||
                     (type === 'cooling_system' && item.id === selectedCoolingSystem) ||
                     (type === 'gpu' && item.id === selectedGPU) ||
-                    (type === 'power_supply' && item.id === selectedPowerSupply);
+                    (type === 'power_supply' && item.id === selectedPowerSupply) ||
+                    (type === 'storage' && item.id === selectedStorage) ||
+                    (type === 'case' && item.id === selectedCase);
 
                 const html = `
                     <div class="component-item ${isActive ? 'active' : ''}" data-id="${item.id}" data-type="${type}">
@@ -230,14 +280,17 @@
                 type === 'ram' ? components.find(item => item.id === selectedRAM) :
                 type === 'cooling_system' ? components.find(item => item.id === selectedCoolingSystem) :
                 type === 'gpu' ? components.find(item => item.id === selectedGPU) :
-                components.find(item => item.id === selectedPowerSupply);
+                type === 'power_supply' ? components.find(item => item.id === selectedPowerSupply) :
+                type === 'storage' ? components.find(item => item.id === selectedStorage) :
+                components.find(item => item.id === selectedCase);
 
             selectedComponentText.text(selectedItem ? selectedItem.name : 'None');
         }
 
         function selectComponent(element, type) {
             const id = $(element).data('id');
-
+            let name = $(element).data('name');  // Assuming the component name is stored in a data attribute
+        
             // Toggle selection
             if ($(element).hasClass('active')) {
                 $(element).removeClass('active');
@@ -251,8 +304,13 @@
                     selectedCoolingSystem = null;
                 } else if (type === 'gpu') {
                     selectedGPU = null;
-                } else {
+                } else if (type === 'power_supply') {
                     selectedPowerSupply = null;
+                } else if (type === 'storage') {
+                    selectedStorage = null;
+                } else {
+                    selectedCase = null;
+                    $('#selected-case-text').text("Selected Case: None"); // Update text when unselecting
                 }
             } else {
                 $(element).siblings().removeClass('active');
@@ -267,14 +325,19 @@
                     selectedCoolingSystem = id;
                 } else if (type === 'gpu') {
                     selectedGPU = id;
-                } else {
+                } else if (type === 'power_supply') {
                     selectedPowerSupply = id;
+                } else if (type === 'storage') {
+                    selectedStorage = id;
+                } else {
+                    selectedCase = id;
+                    $('#selected-case-text').text("Selected Case: " + name); // Update text with selected case name
                 }
             }
-
-            fetchComponents(); // Fetch compatible components based on selection
+        
+            fetchComponents(); // Fetch compatible components after selection
         }
-
+        
         $(document).on('click', '.component-item', function () {
             const type = $(this).data('type');
             selectComponent(this, type);

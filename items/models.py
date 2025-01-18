@@ -84,6 +84,7 @@ class Case_model(models.Model):
     case_name = models.TextField(max_length=100)
     case_manufacturer = models.TextField(max_length=100)
     case_form_factor = models.CharField(max_length=100)
+    case_size = models.CharField(max_length=100)
     case_power_supply_form_factor = models.CharField(max_length=50)
     case_fan = models.IntegerField()
     case_price = models.IntegerField()

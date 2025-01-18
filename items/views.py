@@ -1,7 +1,8 @@
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
-from .models import Motherboard_model, Cpu_model, Ram_model, Cooling_system_model, Gpu_model, Power_supply_model
+from .models import Motherboard_model, Cpu_model, Ram_model, Cooling_system_model, Gpu_model, Power_supply_model, \
+    Case_model, Storage_model
 
 
 # Create your views here.
@@ -14,6 +15,8 @@ def compatibility_page(request):
     cooling_system = Cooling_system_model.objects.all()
     gpus = Gpu_model.objects.all()
     power_supply = Power_supply_model.objects.all()
+    cases = Case_model.objects.all()
+    storages = Storage_model.objects.all()
     return render(request, 'compatibility_page.html', {
         'cpus': cpus,
         'motherboards': motherboards,
@@ -21,6 +24,8 @@ def compatibility_page(request):
         'cooling_system': cooling_system,
         'gpus': gpus,
         'power_supply': power_supply,
+        'cases': cases,
+        'storages': storages,
     })
 
 # Handle compatibility filtering for components
@@ -31,6 +36,7 @@ def get_compatible_components(request):
     selected_cooling_system_id = request.GET.get('cooling_system_id')
     selected_gpu_id = request.GET.get('gpu_id')
     selected_power_supply_id = request.GET.get('power_supply_id')
+    selected_case_id = request.GET.get('case_id')
 
 
     compatible_cpus = Cpu_model.objects.all()
@@ -39,6 +45,8 @@ def get_compatible_components(request):
     compatible_cooling_systems = Cooling_system_model.objects.all()
     compatible_gpus = Gpu_model.objects.all()
     compatible_power_supply = Power_supply_model.objects.all()
+    compatible_cases = Case_model.objects.all()
+    compatible_storages = Storage_model.objects.all()
 
     total_power_requirement = 200
 
@@ -69,6 +77,10 @@ def get_compatible_components(request):
 
         compatible_cooling_systems = compatible_cooling_systems.filter(
             Q(cooling_system_socket__icontains=selected_motherboard.motherboard_socket)
+        )
+
+        compatible_cases = compatible_cases.filter(
+            Q(case_form_factor__icontains=selected_motherboard.motherboard_form_factor)
         )
 
         compatible_motherboards = compatible_motherboards.filter(id=selected_motherboard_id)
@@ -104,7 +116,7 @@ def get_compatible_components(request):
     if selected_gpu_id:
         selected_gpu = get_object_or_404(Gpu_model, id=selected_gpu_id)
         compatible_power_supply = compatible_power_supply.filter(
-            power_supply_power__gte=total_power_requirement + selected_gpu.gpu_power_consumption
+            power_supply_power__gt=total_power_requirement + selected_gpu.gpu_power_consumption
         )
         compatible_gpus = compatible_gpus.filter(id=selected_gpu_id)
         total_power_requirement += selected_gpu.gpu_power_consumption
@@ -112,8 +124,18 @@ def get_compatible_components(request):
     # Filter based on selected PSU
     if selected_power_supply_id:
         selected_power_supply = get_object_or_404(Power_supply_model, id=selected_power_supply_id)
-        compatible_gpus = compatible_gpus.filter(gpu_power_consumption__lte=selected_power_supply.power_supply_power)
+        compatible_gpus = compatible_gpus.filter(gpu_power_consumption__lt=selected_power_supply.power_supply_power)
         compatible_power_supply = compatible_power_supply.filter(id=selected_power_supply_id)
+
+    if selected_case_id:
+        selected_case = get_object_or_404(Case_model, id=selected_case_id)
+        case_form_factors = [form_factor.strip() for form_factor in selected_case.case_form_factor.split(',')]
+
+        compatible_motherboards = compatible_motherboards.filter(motherboard_form_factor__in=case_form_factors)
+
+        compatible_power_supply = compatible_power_supply.filter(power_supply_form_factor=selected_case.case_power_supply_form_factor)
+
+        compatible_cases = compatible_cases.filter(id=selected_case_id)
 
     return JsonResponse({
         'cpus': [
@@ -165,7 +187,7 @@ def get_compatible_components(request):
                 'ram_type': gpu.gpu_ram_type,
                 'bits': gpu.gpu_bits,
                 'price': gpu.gpu_price,
-                'image_url': gpu.gpu_image.url if gpu.gpu_image else None,
+                'image_url': gpu.gpu_image.url,
             }
             for gpu in compatible_gpus
         ],
@@ -178,6 +200,28 @@ def get_compatible_components(request):
                 'image_url': power_sup.power_supply_image.url,
             }
             for power_sup in compatible_power_supply
+        ],
+        'cases': [
+            {
+                'id': case.id,
+                'name': case.case_name,
+                'size': case.case_size,
+                'price': case.case_price,
+                'image_url': case.case_image.url,
+            }
+            for case in compatible_cases
+        ],
+        'storages': [
+            {
+                'id': storage.id,
+                'name': storage.storage_name,
+                'type': storage.storage_type,
+                'capacity': storage.storage_capacity,
+                'speed': storage.storage_speed,
+                'price': storage.storage_price,
+                'image_url': storage.storage_image.url,
+            }
+            for storage in compatible_storages
         ]
     })
 
@@ -267,3 +311,33 @@ def fetch_all_power_supplies(request):
         for power_sup in power_supply
     ]
     return JsonResponse({'power_supply': response})
+
+def fetch_all_cases(request):
+    cases = Case_model.objects.all()
+    response = [
+        {
+            'id': case.id,
+            'name': case.case_name,
+            'size': case.case_size,
+            'price': case.case_price,
+            'image_url': case.case_image.url,
+        }
+        for case in cases
+    ]
+    return JsonResponse({'cases': response})
+
+def fetch_all_storages(request):
+    storages = Storage_model.objects.all()
+    response = [
+        {
+            'id': storage.id,
+            'name': storage.storage_name,
+            'type': storage.storage_type,
+            'capacity': storage.storage_capacity,
+            'speed': storage.storage_speed,
+            'price': storage.storage_price,
+            'image_url': storage.storage_image.url,
+        }
+        for storage in storages
+    ]
+    return JsonResponse({'storages': response})
