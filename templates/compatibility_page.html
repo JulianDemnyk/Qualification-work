@@ -1,35 +1,13 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Compatibility Check</title>
+    <link rel="stylesheet" href="{% static 'compatibility.css' %}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
-        .component-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        .component-item {
-            border: 1px solid #dadada;
-            padding: 10px;
-            width: 200px;
-            cursor: pointer;
-            text-align: center;
-        }
-        .component-item img {
-            max-width: 100%;
-            height: auto;
-        }
-        .component-item.active {
-            border: 2px solid #007BFF;
-            background-color: #dadada;
-        }
-        .selected-component {
-            margin-top: 20px;
-        }
-    </style>
+    <script src="{% static 'js/compatibility.js' %}"></script>
 </head>
 <body>
     <h1>PC Component Compatibility</h1>
@@ -48,9 +26,6 @@
                 </div>
             {% endfor %}
         </div>
-        <div class="selected-component">
-            <h3>Selected CPU: <span id="selected-cpu">None</span></h3>
-        </div>
     </div>
 
     <!-- Motherboard Selection -->
@@ -67,8 +42,21 @@
                 </div>
             {% endfor %}
         </div>
-        <div class="selected-component">
-            <h3>Selected Motherboard: <span id="selected-motherboard">None</span></h3>
+    </div>
+    
+    <!-- GPU Selection -->
+    <div>
+        <h2>Select a GPU</h2>
+        <div id="gpu-list" class="component-list">
+            {% for gpu in gpus %}
+                <div class="component-item" data-id="{{ gpu.id }}" data-type="gpu">
+                    <img src="{{ gpu.gpu_image.url }}" alt="{{ gpu.gpu_name }}">
+                    <h3>{{ gpu.gpu_name }}</h3>
+                    <p>RAM: {{ gpu.gpu_ram }} GB</p>
+                    <p>Type: {{ gpu.gpu_ram_type }}</p>
+                    <p>Price: {{ gpu.gpu_price }}</p>
+                </div>
+            {% endfor %}    
         </div>
     </div>
 
@@ -87,16 +75,13 @@
                 </div>
             {% endfor %}
         </div>
-        <div class="selected-component">
-            <h3>Selected RAM: <span id="selected-ram">None</span></h3>
-        </div>
     </div>
 
     <!-- Cooling System Selection -->
     <div>
         <h2>Select a Cooling System</h2>
         <div id="cooling-system-list" class="component-list">
-            {% for cooling_system in cooling_system %}
+            {% for cooling_system in cooling_systems %}
                 <div class="component-item" data-id="{{ cooling_system.id }}" data-type="cooling_system">
                     <img src="{{ cooling_system.cooling_system_image.url }}" alt="{{ cooling_system.cooling_system_name }}">
                     <h3>{{ cooling_system.cooling_system_name }}</h3>
@@ -105,35 +90,13 @@
                 </div>
             {% endfor %}
         </div>
-        <div class="selected-component">
-            <h3>Selected Cooling System: <span id="selected-cooling-system">None</span></h3>
-        </div>
     </div>
-
-    <!-- GPU Selection -->
-    <div>
-        <h2>Select a GPU</h2>
-        <div id="gpu-list" class="component-list">
-            {% for gpu in gpus %}
-                <div class="component-item" data-id="{{ gpu.id }}" data-type="gpu">
-                    <img src="{{ gpu.gpu_image.url }}" alt="{{ gpu.gpu_name }}">
-                    <h3>{{ gpu.gpu_name }}</h3>
-                    <p>RAM: {{ gpu.gpu_ram }} GB</p>
-                    <p>Type: {{ gpu.gpu_ram_type }}</p>
-                    <p>Price: {{ gpu.gpu_price }}</p>
-                </div>
-            {% endfor %}
-        </div>
-        <div class="selected-component">
-            <h3>Selected GPU: <span id="selected-gpu">None</span></h3>
-        </div>
-    </div>
-
+    
     <!-- Power Supply Selection -->
     <div>
         <h2>Select a Power Supply</h2>
         <div id="power-supply-list" class="component-list">
-            {% for power_supply in power_supply %}
+            {% for power_supply in power_supplys %}
                 <div class="component-item" data-id="{{ power_supply.id }}" data-type="power_supply">
                     <img src="{{ power_supply.power_supply_image.url }}" alt="{{ power_supply.power_supply_name }}">
                     <h3>{{ power_supply.power_supply_name }}</h3>
@@ -141,9 +104,6 @@
                     <p>Price: {{ power_supply.power_supply_price }}</p>
                 </div>
             {% endfor %}
-        </div>
-        <div class="selected-component">
-            <h3>Selected Power Supply: <span id="selected-power-supply">None</span></h3>
         </div>
     </div>
 
@@ -161,9 +121,6 @@
                 </div>
             {% endfor %}
         </div>
-        <div class="selected-component">
-            <h3>Selected Storage: <span id="selected-storage">None</span></h3>
-        </div>
     </div>
 
     <!-- Case Selection -->
@@ -180,172 +137,24 @@
                 </div>
             {% endfor %}
         </div>
+    </div>
+    
         <div class="selected-component">
+            <h3>Selected CPU: <span id="selected-cpu">None</span></h3>
+            <h3>Selected Motherboard: <span id="selected-motherboard">None</span></h3>
+            <h3>Selected GPU: <span id="selected-gpu">None</span></h3>
+            <h3>Selected RAM: <span id="selected-ram">None</span></h3>
+            <h3>Selected Cooling System: <span id="selected-cooling-system">None</span></h3>
+            <h3>Selected Power Supply: <span id="selected-power-supply">None</span></h3>
+            <h3>Selected Storage: <span id="selected-storage">None</span></h3>
             <h3>Selected Case: <span id="selected-case">None</span></h3>
         </div>
-    </div>
+    
+    <button id="save-build-btn">Save Build</button>
 
     <script>
-        let selectedCPU = null;
-        let selectedMotherboard = null;
-        let selectedRAM = null;
-        let selectedCoolingSystem = null;
-        let selectedGPU = null;
-        let selectedPowerSupply = null;
-        let selectedStorage = null;
-        let selectedCase = null;
-
-                function fetchComponents() {
-            const url = '{% url "get_compatible_components" %}';
-            const data = {
-                cpu_id: selectedCPU,
-                motherboard_id: selectedMotherboard,
-                ram_id: selectedRAM,
-                cooling_system_id: selectedCoolingSystem,
-                gpu_id: selectedGPU,
-                power_supply_id: selectedPowerSupply,
-                storage_id: selectedStorage,
-                case_id: selectedCase // Make sure this is included
-            };
-
-            $.ajax({
-                url: url,
-                data: data,
-                success: function (response) {
-                    updateComponentList('cpu', response.cpus);
-                    updateComponentList('motherboard', response.motherboards); // Ensure this is updated
-                    updateComponentList('ram', response.ram);
-                    updateComponentList('cooling_system', response.cooling_systems);
-                    updateComponentList('gpu', response.gpus);
-                    updateComponentList('power_supply', response.power_supply);
-                    updateComponentList('storage', response.storages);
-                    updateComponentList('case', response.cases);
-                },
-            });
-        }
-
-        function updateComponentList(type, components) {
-            const listContainer = type === 'cpu' ? $('#cpu-list') :
-                                  type === 'motherboard' ? $('#motherboard-list') :
-                                  type === 'ram' ? $('#ram-list') :
-                                  type === 'cooling_system' ? $('#cooling-system-list') :
-                                  type === 'gpu' ? $('#gpu-list') :
-                                  type === 'power_supply' ? $('#power-supply-list') :
-                                  type === 'storage' ? $('#storage-list') :
-                                  $('#case-list');
-            const selectedComponentText = type === 'cpu' ? $('#selected-cpu') :
-                                          type === 'motherboard' ? $('#selected-motherboard') :
-                                          type === 'ram' ? $('#selected-ram') :
-                                          type === 'cooling_system' ? $('#selected-cooling-system') :
-                                          type === 'gpu' ? $('#selected-gpu') :
-                                          type === 'power_supply' ? $('#selected-power-supply') :
-                                          type === 'storage' ? $('#selected-storage') :
-                                          $('#selected-case');
-
-            listContainer.empty();
-
-            // If there are no compatible items, show a message
-            if (components.length === 0) {
-                listContainer.append('<p>No compatible items found.</p>');
-                return;
-            }
-
-            // Add compatible or selected items
-            components.forEach((item) => {
-                const isActive =
-                    (type === 'cpu' && item.id === selectedCPU) ||
-                    (type === 'motherboard' && item.id === selectedMotherboard) ||
-                    (type === 'ram' && item.id === selectedRAM) ||
-                    (type === 'cooling_system' && item.id === selectedCoolingSystem) ||
-                    (type === 'gpu' && item.id === selectedGPU) ||
-                    (type === 'power_supply' && item.id === selectedPowerSupply) ||
-                    (type === 'storage' && item.id === selectedStorage) ||
-                    (type === 'case' && item.id === selectedCase);
-
-                const html = `
-                    <div class="component-item ${isActive ? 'active' : ''}" data-id="${item.id}" data-type="${type}">
-                        <img src="${item.image_url}" alt="${item.name}">
-                        <h3>${item.name}</h3>
-                        <p>${type === 'ram' || type === 'gpu' || type === 'power_supply' ? item.price : 'Socket: ' + item.socket}</p>
-                        <p>Price: ${item.price}</p>
-                    </div>
-                `;
-                listContainer.append(html);
-            });
-
-            // Update the selected component text
-            const selectedItem =
-                type === 'cpu' ? components.find(item => item.id === selectedCPU) :
-                type === 'motherboard' ? components.find(item => item.id === selectedMotherboard) :
-                type === 'ram' ? components.find(item => item.id === selectedRAM) :
-                type === 'cooling_system' ? components.find(item => item.id === selectedCoolingSystem) :
-                type === 'gpu' ? components.find(item => item.id === selectedGPU) :
-                type === 'power_supply' ? components.find(item => item.id === selectedPowerSupply) :
-                type === 'storage' ? components.find(item => item.id === selectedStorage) :
-                components.find(item => item.id === selectedCase);
-
-            selectedComponentText.text(selectedItem ? selectedItem.name : 'None');
-        }
-
-        function selectComponent(element, type) {
-            const id = $(element).data('id');
-            let name = $(element).data('name');  // Assuming the component name is stored in a data attribute
-        
-            // Toggle selection
-            if ($(element).hasClass('active')) {
-                $(element).removeClass('active');
-                if (type === 'cpu') {
-                    selectedCPU = null;
-                } else if (type === 'motherboard') {
-                    selectedMotherboard = null;
-                } else if (type === 'ram') {
-                    selectedRAM = null;
-                } else if (type === 'cooling_system') {
-                    selectedCoolingSystem = null;
-                } else if (type === 'gpu') {
-                    selectedGPU = null;
-                } else if (type === 'power_supply') {
-                    selectedPowerSupply = null;
-                } else if (type === 'storage') {
-                    selectedStorage = null;
-                } else {
-                    selectedCase = null;
-                    $('#selected-case-text').text("Selected Case: None"); // Update text when unselecting
-                }
-            } else {
-                $(element).siblings().removeClass('active');
-                $(element).addClass('active');
-                if (type === 'cpu') {
-                    selectedCPU = id;
-                } else if (type === 'motherboard') {
-                    selectedMotherboard = id;
-                } else if (type === 'ram') {
-                    selectedRAM = id;
-                } else if (type === 'cooling_system') {
-                    selectedCoolingSystem = id;
-                } else if (type === 'gpu') {
-                    selectedGPU = id;
-                } else if (type === 'power_supply') {
-                    selectedPowerSupply = id;
-                } else if (type === 'storage') {
-                    selectedStorage = id;
-                } else {
-                    selectedCase = id;
-                    $('#selected-case-text').text("Selected Case: " + name); // Update text with selected case name
-                }
-            }
-        
-            fetchComponents(); // Fetch compatible components after selection
-        }
-        
-        $(document).on('click', '.component-item', function () {
-            const type = $(this).data('type');
-            selectComponent(this, type);
-        });
-
-        $(document).ready(function () {
-            fetchComponents();
-        });
+        document.getElementById('save-build-btn').addEventListener('click', saveBuild);
     </script>
+
 </body>
 </html>

@@ -16,6 +16,9 @@ class Motherboard_model(models.Model):
     motherboard_description = models.TextField(max_length=1500, blank=True)
     motherboard_image = models.ImageField(default='fallback.png', blank=True)
 
+    def __str__(self):
+        return self.motherboard_name
+
 class Cpu_model(models.Model):
     cpu_name = models.TextField(max_length=100)
     cpu_manufacturer = models.TextField(max_length=100)
@@ -27,6 +30,9 @@ class Cpu_model(models.Model):
     cpu_price = models.IntegerField()
     cpu_description = models.TextField(max_length=1500, blank=True)
     cpu_image = models.ImageField(default='fallback.png', blank=True)
+
+    def __str__(self):
+        return self.cpu_name
 
 class Gpu_model(models.Model):
     gpu_name = models.TextField(max_length=100)
@@ -40,6 +46,9 @@ class Gpu_model(models.Model):
     gpu_description = models.TextField(max_length=1500, blank=True)
     gpu_image = models.ImageField(default='fallback.png', blank=True)
 
+    def __str__(self):
+        return self.gpu_name
+
 class Ram_model(models.Model):
     ram_name = models.TextField(max_length=100)
     ram_manufacturer = models.TextField(max_length=100)
@@ -50,6 +59,9 @@ class Ram_model(models.Model):
     ram_price = models.IntegerField()
     ram_description = models.TextField(max_length=1500, blank=True)
     ram_image = models.ImageField(default='fallback.png', blank=True)
+
+    def __str__(self):
+        return self.ram_name
 
 class Storage_model(models.Model):
     storage_name = models.TextField(max_length=100)
@@ -62,6 +74,9 @@ class Storage_model(models.Model):
     storage_description = models.TextField(max_length=1500, blank=True)
     storage_image = models.ImageField(default='fallback.png', blank=True)
 
+    def __str__(self):
+        return self.storage_name
+
 class Cooling_system_model(models.Model):
     cooling_system_name = models.TextField(max_length=100)
     cooling_system_manufacturer = models.TextField(max_length=100)
@@ -71,6 +86,9 @@ class Cooling_system_model(models.Model):
     cooling_system_description = models.TextField(max_length=1500, blank=True)
     cooling_system_image = models.ImageField(default='fallback.png', blank=True)
 
+    def __str__(self):
+        return self.cooling_system_name
+
 class Power_supply_model(models.Model):
     power_supply_name = models.TextField(max_length=100)
     power_supply_manufacturer = models.TextField(max_length=100)
@@ -79,6 +97,9 @@ class Power_supply_model(models.Model):
     power_supply_price = models.IntegerField()
     power_supply_description = models.TextField(max_length=1500, blank=True)
     power_supply_image = models.ImageField(default='fallback.png', blank=True)
+
+    def __str__(self):
+        return self.power_supply_name
 
 class Case_model(models.Model):
     case_name = models.TextField(max_length=100)
@@ -90,6 +111,9 @@ class Case_model(models.Model):
     case_price = models.IntegerField()
     case_description = models.TextField(max_length=1500, blank=True)
     case_image = models.ImageField(default='fallback.png', blank=True)
+
+    def __str__(self):
+        return self.case_name
 
 class Computer_build(models.Model):
     cpu = models.ForeignKey(Cpu_model, on_delete=models.CASCADE)

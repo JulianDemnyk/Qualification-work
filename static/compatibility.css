@@ -1,0 +1,27 @@
+.component-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.component-item {
+    border: 1px solid #dadada;
+    padding: 10px;
+    width: 200px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.component-item img {
+      max-width: 100%;
+      height: auto;
+}
+
+.component-item.active {
+      border: 2px solid #007BFF;
+      background-color: #dadada;
+}
+
+.selected-component {
+      margin-top: 20px;
+}

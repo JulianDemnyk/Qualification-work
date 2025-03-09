@@ -2,7 +2,7 @@ from django.db.models import Q
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from .models import Motherboard_model, Cpu_model, Ram_model, Cooling_system_model, Gpu_model, Power_supply_model, \
-    Case_model, Storage_model
+    Case_model, Storage_model, Computer_build
 
 
 # Create your views here.
@@ -12,18 +12,18 @@ def compatibility_page(request):
     cpus = Cpu_model.objects.all()
     motherboards = Motherboard_model.objects.all()
     ram_modules = Ram_model.objects.all()
-    cooling_system = Cooling_system_model.objects.all()
+    cooling_systems = Cooling_system_model.objects.all()
     gpus = Gpu_model.objects.all()
-    power_supply = Power_supply_model.objects.all()
+    power_supplys = Power_supply_model.objects.all()
     cases = Case_model.objects.all()
     storages = Storage_model.objects.all()
     return render(request, 'compatibility_page.html', {
         'cpus': cpus,
         'motherboards': motherboards,
         'ram_modules': ram_modules,
-        'cooling_system': cooling_system,
+        'cooling_systems': cooling_systems,
         'gpus': gpus,
-        'power_supply': power_supply,
+        'power_supplys': power_supplys,
         'cases': cases,
         'storages': storages,
     })
@@ -37,7 +37,6 @@ def get_compatible_components(request):
     selected_gpu_id = request.GET.get('gpu_id')
     selected_power_supply_id = request.GET.get('power_supply_id')
     selected_case_id = request.GET.get('case_id')
-
 
     compatible_cpus = Cpu_model.objects.all()
     compatible_motherboards = Motherboard_model.objects.all()
@@ -224,6 +223,60 @@ def get_compatible_components(request):
             for storage in compatible_storages
         ]
     })
+
+
+def save_computer_build(request):
+    if request.method == 'POST':
+        cpu_id = request.POST.get('cpu')
+        motherboard_id = request.POST.get('motherboard')
+        gpu_id = request.POST.get('gpu')
+        ram_id = request.POST.get('ram')
+        storage_id = request.POST.get('storage')
+        cooling_system_id = request.POST.get('cooling_system')
+        power_supply_id = request.POST.get('power_supply')
+        case_id = request.POST.get('case')
+
+        # Validate that all components are selected
+        if not all([cpu_id, motherboard_id, gpu_id, ram_id, storage_id, cooling_system_id, power_supply_id, case_id]):
+            return JsonResponse({'status': 'error', 'message': 'All components must be selected'})
+
+        # Get the component objects from the database
+        try:
+            cpu = Cpu_model.objects.get(id=cpu_id)
+            motherboard = Motherboard_model.objects.get(id=motherboard_id)
+            gpu = Gpu_model.objects.get(id=gpu_id)
+            ram = Ram_model.objects.get(id=ram_id)
+            storage = Storage_model.objects.get(id=storage_id)
+            cooling_system = Cooling_system_model.objects.get(id=cooling_system_id)
+            power_supply = Power_supply_model.objects.get(id=power_supply_id)
+            case = Case_model.objects.get(id=case_id)
+
+            # Calculate total price
+            total_price = (
+                cpu.cpu_price + motherboard.motherboard_price + gpu.gpu_price +
+                ram.ram_price + storage.storage_price + cooling_system.cooling_system_price +
+                power_supply.power_supply_price + case.case_price
+            )
+
+            # Save the build to the database
+            build = Computer_build.objects.create(
+                cpu=cpu,
+                motherboard=motherboard,
+                gpu=gpu,
+                ram=ram,
+                storage=storage,
+                cooling_system=cooling_system,
+                power=power_supply,
+                case=case,
+                price=total_price
+            )
+
+            return JsonResponse({'status': 'success', 'message': 'Build saved successfully', 'build_id': build.id})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)})
+    else:
+        return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+
 
 def fetch_all_cpus(request):
     cpus = Cpu_model.objects.all()
