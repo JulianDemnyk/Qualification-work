@@ -73,13 +73,13 @@ function updateComponentList(type, components) {
             (type === 'case' && item.id === selectedCase);
 
         const html = `
-                    <div class="component-item ${isActive ? 'active' : ''}" data-id="${item.id}" data-type="${type}">
-                        <img src="${item.image_url}" alt="${item.name}">
-                        <h3>${item.name}</h3>
-                        <p>Price: ${item.price}</p>
-                    </div>
-                    <a href="../">View ${item.name}</a>
-                    `;
+            <div class="component-item ${isActive ? 'active' : ''}" data-id="${item.id}" data-type="${type}">
+                <img src="${item.image_url}" alt="${item.name}">
+                <h3>${item.name}</h3>
+                <p>Price: ${item.price}</p>
+            </div>
+                <a href="/${type}_detail/${item.id}/">View ${item.name}</a>
+        `;
         listContainer.append(html);
     });
 
@@ -144,7 +144,7 @@ function selectComponent(element, type) {
         }
     }
 
-    fetchComponents(); // Fetch compatible components after selection
+    fetchComponents(); // Fetch compatible items after selection
 }
 
 $(document).on('click', '.component-item', function () {

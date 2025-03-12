@@ -1,0 +1,16 @@
+{% extends "pages/base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>{{ ram.ram_name }}</h1>
+    <img src="{{ ram.ram_image.url }}" alt="{{ ram.ram_name }}">
+    <p>Manufacturer: {{ ram.ram_manufacturer }}</p>
+    <p>Type: {{ ram.ram_type }}</p>
+    <p>Clock Speed: {{ ram.ram_clock_speed }}</p>
+    <p>Size: {{ ram.ram_size }}</p>
+    <p>Amount: {{ ram.ram_amount }} GB</p>
+    <p>Price: ${{ ram.ram_price }}</p>
+    <p>Description: {{ ram.ram_description }}</p>
+{#    <a href="{% url 'ram_list' %}">Back to RAMs</a>#}
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div class="cpu-list">
+
+        <div>
+
+            <form action="{% url 'list_view_cpu' %}">
+                <input type="text" name="q" placeholder="Search for cpu"/>
+            </form>
+
+            <h3><a href="{% url 'list_view_cpu' %}">All Cpus</a></h3>
+
+        </div>
+
+        <div>
+
+            <h4>{{ cpu_count }} Cpus found</h4>
+
+            <div class="cpus-container">
+                {% for cpu in cpu_list %}
+                        <div class="item">
+                            <img class="image" src="{{ cpu.cpu_image.url }}" alt="{{ cpu.cpu_name }}"/>
+                            <p><a href="{% url 'detail_view_cpu' cpu.id %}">{{ cpu.cpu_name }}</a></p>
+                        </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

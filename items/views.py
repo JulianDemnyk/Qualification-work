@@ -6,6 +6,9 @@ from .models import Motherboard_model, Cpu_model, Ram_model, Cooling_system_mode
 
 
 # Create your views here.
+def home_view(request, *args, **kwargs):
+    return render (request, "pages/base.html", {})
+
 
 def compatibility_page(request):
     # Render the main compatibility page
@@ -17,7 +20,8 @@ def compatibility_page(request):
     power_supplys = Power_supply_model.objects.all()
     cases = Case_model.objects.all()
     storages = Storage_model.objects.all()
-    return render(request, 'compatibility_page.html', {
+
+    context = {
         'cpus': cpus,
         'motherboards': motherboards,
         'ram_modules': ram_modules,
@@ -26,9 +30,10 @@ def compatibility_page(request):
         'power_supplys': power_supplys,
         'cases': cases,
         'storages': storages,
-    })
+    }
+    return render(request, 'items/compatibility_page.html', context)
 
-# Handle compatibility filtering for components
+# Handle compatibility filtering for items
 def get_compatible_components(request):
     selected_cpu_id = request.GET.get('cpu_id')
     selected_motherboard_id = request.GET.get('motherboard_id')
@@ -49,7 +54,7 @@ def get_compatible_components(request):
 
     total_power_requirement = 200
 
-    # Filter components based on the selected CPU
+    # Filter items based on the selected CPU
     if selected_cpu_id:
         selected_cpu = get_object_or_404(Cpu_model, id=selected_cpu_id)
         compatible_motherboards = compatible_motherboards.filter(motherboard_socket=selected_cpu.cpu_socket)
@@ -63,7 +68,7 @@ def get_compatible_components(request):
 
         compatible_cpus = compatible_cpus.filter(id=selected_cpu_id)
 
-    # Filter components based on the selected motherboard
+    # Filter items based on the selected motherboard
     if selected_motherboard_id:
         selected_motherboard = get_object_or_404(Motherboard_model, id=selected_motherboard_id)
         compatible_cpus = compatible_cpus.filter(cpu_socket=selected_motherboard.motherboard_socket)
@@ -236,9 +241,9 @@ def save_computer_build(request):
         power_supply_id = request.POST.get('power_supply')
         case_id = request.POST.get('case')
 
-        # Validate that all components are selected
+        # Validate that all items are selected
         if not all([cpu_id, motherboard_id, gpu_id, ram_id, storage_id, cooling_system_id, power_supply_id, case_id]):
-            return JsonResponse({'status': 'error', 'message': 'All components must be selected'})
+            return JsonResponse({'status': 'error', 'message': 'All items must be selected'})
 
         # Get the component objects from the database
         try:
@@ -277,6 +282,80 @@ def save_computer_build(request):
     else:
         return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
 
+
+def detail_view_cpu(request, id):
+    cpu = get_object_or_404(Cpu_model, id=id)
+    context = {
+        'cpu': cpu,
+    }
+    return render(request, 'items/detail/cpu_detail.html', context)
+
+def list_view_cpu(request):
+    q=request.GET.get('q') if request.GET.get('q') is not None else ''
+
+    cpu = Cpu_model.objects.filter(
+        Q(cpu_name=q)|
+        Q(cpu_manufacturer__contains=q)|
+        Q(cpu_socket__contains=q)|
+        Q(cpu_description__contains=q)
+    )
+
+    cpu_count = cpu.count()
+
+    context = {
+        'cpu_list': cpu,
+        'cpu_count': cpu_count,
+    }
+    return render(request, "items/list/cpu_list.html", context)
+
+def detail_view_motherboard(request, id):
+    motherboard = get_object_or_404(Motherboard_model, id=id)
+    context = {
+        'motherboard': motherboard,
+    }
+    return render(request, 'items/detail/motherboard_detail.html', context)
+
+def detail_view_gpu(request, id):
+    gpu = get_object_or_404(Gpu_model, id=id)
+    context = {
+        'gpu': gpu,
+    }
+    return render(request, 'items/detail/gpu_detail.html', context)
+
+def detail_view_ram(request, id):
+    ram = get_object_or_404(Ram_model, id=id)
+    context = {
+        'ram': ram,
+    }
+    return render(request, 'items/detail/ram_detail.html', context)
+
+def detail_view_storage(request, id):
+    storage = get_object_or_404(Storage_model, id=id)
+    context = {
+        'storage': storage,
+    }
+    return render(request, 'items/detail/storage_detail.html', context)
+
+def detail_view_cooling_system(request, id):
+    cooling_system = get_object_or_404(Cooling_system_model, id=id)
+    context = {
+        'cooling_system': cooling_system,
+    }
+    return render(request, 'items/detail/cooling_system_detail.html', context)
+
+def detail_view_power_supply(request, id):
+    power_supply = get_object_or_404(Power_supply_model, id=id)
+    context = {
+        'power_supply': power_supply,
+    }
+    return render(request, 'items/detail/power_supply_detail.html', context)
+
+def detail_view_case(request, id):
+    case = get_object_or_404(Case_model, id=id)
+    context = {
+        'case': case,
+    }
+    return render(request, 'items/detail/case_detail.html', context)
 
 def fetch_all_cpus(request):
     cpus = Cpu_model.objects.all()

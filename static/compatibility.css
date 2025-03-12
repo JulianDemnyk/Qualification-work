@@ -25,3 +25,7 @@
 .selected-component {
       margin-top: 20px;
 }
+
+.component-view {
+    justify-content: space-between;
+}

@@ -1,0 +1,17 @@
+{% extends "pages/base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>{{ gpu.gpu_name }}</h1>
+    <img src="{{ gpu.gpu_image.url }}" alt="{{ gpu.gpu_name }}">
+    <p>Manufacturer: {{ gpu.gpu_manufacturer }}</p>
+    <p>Clock Speed: {{ gpu.gpu_clock_speed }}</p>
+    <p>Bus Width (bits): {{ gpu.gpu_bits }}</p>
+    <p>RAM: {{ gpu.gpu_ram }}</p>
+    <p>RAM Type: {{ gpu.gpu_ram_type }}</p>
+    <p>Power Consumption: {{ gpu.gpu_power_consumption }} W</p>
+    <p>Price: ${{ gpu.gpu_price }}</p>
+    <p>Description: {{ gpu.gpu_description }}</p>
+{#    <a href="{% url 'gpu_list' %}">Back to GPUs</a>#}
+</div>
+{% endblock %}

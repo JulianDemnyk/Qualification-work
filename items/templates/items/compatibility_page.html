@@ -1,0 +1,125 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+
+{% block content %}
+    <link rel="stylesheet", href="{% static 'compatibility.css' %}">
+    
+    <h1>PC Component Compatibility</h1>
+
+    <!-- CPU Selection -->
+    <div>
+        <h2>Select a CPU</h2>
+        <div id="cpu-list" class="component-list">
+        </div>
+        <div class="component-view">
+            {% for cpu in cpus %}
+                <a href="..">View {{ cpu.name }}</a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Motherboard Selection -->
+    <div>
+        <h2>Select a Motherboard</h2>
+        <div id="motherboard-list" class="component-list">
+        </div>
+        <div class="component-view">
+            {% for cpu in cpus %}
+                <a href="../">View {{ cpu.name }}</a>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <!-- GPU Selection -->
+    <div>
+        <h2>Select a GPU</h2>
+        <div id="gpu-list" class="component-list">
+        </div>
+        <div class="component-view">
+            {% for cpu in cpus %}
+                <a href="../../..">View {{ cpu.name }}</a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- RAM Selection -->
+    <div>
+        <h2>Select RAM</h2>
+        <div id="ram-list" class="component-list">
+        </div>
+        <div class="component-view">
+            {% for cpu in cpus %}
+                <a href="../../..">View {{ cpu.name }}</a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Cooling System Selection -->
+    <div>
+        <h2>Select a Cooling System</h2>
+        <div id="cooling-system-list" class="component-list">
+        </div>
+        <div class="component-view">
+            {% for cpu in cpus %}
+                <a href="../../..">View {{ cpu.name }}</a>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <!-- Power Supply Selection -->
+    <div>
+        <h2>Select a Power Supply</h2>
+        <div id="power-supply-list" class="component-list">
+        </div>
+        <div class="component-view">
+            {% for cpu in cpus %}
+                <a href="../../..">View {{ cpu.name }}</a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Storage Selection -->
+    <div>
+        <h2>Select a Storage</h2>
+        <div id="storage-list" class="component-list">
+        </div>
+        <div class="component-view">
+            {% for cpu in cpus %}
+                <a href="../../..">View {{ cpu.name }}</a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Case Selection -->
+    <div>
+        <h2>Select a Case</h2>
+        <div id="case-list" class="component-list">
+        </div>
+        <div class="component-view">
+            {% for cpu in cpus %}
+                <a href="../../..">View {{ cpu.name }}</a>
+            {% endfor %}
+        </div>
+    </div>
+    
+        <div class="selected-component">
+            <h3>Selected CPU: <span id="selected-cpu">None</span></h3>
+            <h3>Selected Motherboard: <span id="selected-motherboard">None</span></h3>
+            <h3>Selected GPU: <span id="selected-gpu">None</span></h3>
+            <h3>Selected RAM: <span id="selected-ram">None</span></h3>
+            <h3>Selected Cooling System: <span id="selected-cooling-system">None</span></h3>
+            <h3>Selected Power Supply: <span id="selected-power-supply">None</span></h3>
+            <h3>Selected Storage: <span id="selected-storage">None</span></h3>
+            <h3>Selected Case: <span id="selected-case">None</span></h3>
+        </div>
+    
+    <button id="save-build-btn">Save Build</button>
+
+
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="{% static 'js/compatibility.js' %}"></script>
+    <script>
+        document.getElementById('save-build-btn').addEventListener('click', saveBuild);
+    </script>
+
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends "pages/base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>{{ case.case_name }}</h1>
+    <img src="{{ case.case_image.url }}" alt="{{ case.case_name }}">
+    <p>Manufacturer: {{ case.case_manufacturer }}</p>
+    <p>Form Factor: {{ case.case_form_factor }}</p>
+    <p>Size: {{ case.case_size }}</p>
+    <p>Power Supply Form Factor: {{ case.case_power_supply_form_factor }}</p>
+    <p>Number of Fans: {{ case.case_fan }}</p>
+    <p>Price: ${{ case.case_price }}</p>
+    <p>Description: {{ case.case_description }}</p>
+{#    <a href="{% url 'case_list' %}">Back to Cases</a>#}
+</div>
+{% endblock %}
