@@ -24,9 +24,11 @@
                         <div class="item">
                             <img class="image" src="{{ cpu.cpu_image.url }}" alt="{{ cpu.cpu_name }}"/>
                             <p><a href="{% url 'detail_view_cpu' cpu.id %}">{{ cpu.cpu_name }}</a></p>
+                            <p>Price: {{ cpu.cpu_price }}₴</p>
                         </div>
                 {% endfor %}
             </div>
+
         </div>
 
     </div>

@@ -10,8 +10,8 @@
     <p>Threads: {{ cpu.cpu_threads }}</p>
     <p>Clock Speed: {{ cpu.cpu_clock_speed }}</p>
     <p>TDP: {{ cpu.cpu_tdp }} W</p>
-    <p>Price: ${{ cpu.cpu_price }}</p>
+    <p>Price: {{ cpu.cpu_price }}₴</p>
     <p>Description: {{ cpu.cpu_description }}</p>
-{#    <a href="{% url 'cpu_list' %}">Back to CPUs</a>#}
+    <a href="{% url 'list_view_cpu' %}">Back to CPUs</a>
 </div>
 {% endblock %}

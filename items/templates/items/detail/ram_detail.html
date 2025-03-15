@@ -9,8 +9,8 @@
     <p>Clock Speed: {{ ram.ram_clock_speed }}</p>
     <p>Size: {{ ram.ram_size }}</p>
     <p>Amount: {{ ram.ram_amount }} GB</p>
-    <p>Price: ${{ ram.ram_price }}</p>
+    <p>Price: {{ ram.ram_price }}₴</p>
     <p>Description: {{ ram.ram_description }}</p>
-{#    <a href="{% url 'ram_list' %}">Back to RAMs</a>#}
+    <a href="{% url 'list_view_ram' %}">Back to RAMs</a>
 </div>
 {% endblock %}

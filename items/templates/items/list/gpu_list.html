@@ -1,0 +1,36 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div class="gpu-list">
+
+        <div>
+
+            <form action="{% url 'list_view_gpu' %}">
+                <input type="text" name="q" placeholder="Search for gpu"/>
+            </form>
+
+            <h3><a href="{% url 'list_view_gpu' %}">All Gpus</a></h3>
+
+        </div>
+
+        <div>
+
+            <h4>{{ gpu_count }} Gpus found</h4>
+
+            <div class="gpu-container">
+                {% for gpu in gpu_list %}
+                        <div class="item">
+                            <img class="image" src="{{ gpu.gpu_image.url }}" alt="{{ gpu.gpu_name }}"/>
+                            <p><a href="{% url 'detail_view_gpu' gpu.id %}">{{ gpu.gpu_name }}</a></p>
+                            <p>Price: {{ gpu.gpu_price }}₴</p>
+                        </div>
+                {% endfor %}
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

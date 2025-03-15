@@ -1,0 +1,36 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div class="cooling-system-list">
+
+        <div>
+
+            <form action="{% url 'list_view_cooling_system' %}">
+                <input type="text" name="q" placeholder="Search for cooling system"/>
+            </form>
+
+            <h3><a href="{% url 'list_view_cooling_system' %}">All Cooling systems</a></h3>
+
+        </div>
+
+        <div>
+
+            <h4>{{ cooling_system_count }} Cooling systems found</h4>
+
+            <div class="cooling-systems-container">
+                {% for cooling_system in cooling_system_list %}
+                        <div class="item">
+                            <img class="image" src="{{ cooling_system.cooling_system_image.url }}" alt="{{ cooling_system.cooling_system_name }}"/>
+                            <p><a href="{% url 'detail_view_cooling_system' cooling_system.id %}">{{ cooling_system.cooling_system_name }}</a></p>
+                            <p>Price: {{ cooling_system.cooling_system_price }}₴</p>
+                        </div>
+                {% endfor %}
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

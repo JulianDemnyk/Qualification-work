@@ -1,0 +1,36 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div class="ram-list">
+
+        <div>
+
+            <form action="{% url 'list_view_ram' %}">
+                <input type="text" name="q" placeholder="Search for ram"/>
+            </form>
+
+            <h3><a href="{% url 'list_view_ram' %}">All Rams</a></h3>
+
+        </div>
+
+        <div>
+
+            <h4>{{ ram_count }} Rams found</h4>
+
+            <div class="ram-container">
+                {% for ram in ram_list %}
+                        <div class="item">
+                            <img class="image" src="{{ ram.ram_image.url }}" alt="{{ ram.ram_name }}"/>
+                            <p><a href="{% url 'detail_view_ram' ram.id %}">{{ ram.ram_name }}</a></p>
+                            <p>Price: {{ ram.ram_price }}₴</p>
+                        </div>
+                {% endfor %}
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

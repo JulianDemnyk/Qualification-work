@@ -9,8 +9,8 @@
     <p>Capacity: {{ storage.storage_capacity }}</p>
     <p>Speed: {{ storage.storage_speed }}</p>
     <p>Connection: {{ storage.storage_connection }}</p>
-    <p>Price: ${{ storage.storage_price }}</p>
+    <p>Price: {{ storage.storage_price }}₴</p>
     <p>Description: {{ storage.storage_description }}</p>
-{#    <a href="{% url 'storage_list' %}">Back to Storage</a>#}
+    <a href="{% url 'list_view_storage' %}">Back to Storage</a>
 </div>
 {% endblock %}

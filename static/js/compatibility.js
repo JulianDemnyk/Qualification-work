@@ -25,10 +25,10 @@ function fetchComponents() {
             success: function (response) {
                 updateComponentList('cpu', response.cpus);
                 updateComponentList('motherboard', response.motherboards); // Ensure this is updated
-                updateComponentList('ram', response.ram);
+                updateComponentList('ram', response.rams);
                 updateComponentList('cooling_system', response.cooling_systems);
                 updateComponentList('gpu', response.gpus);
-                updateComponentList('power_supply', response.power_supply);
+                updateComponentList('power_supply', response.power_supplys);
                 updateComponentList('storage', response.storages);
                 updateComponentList('case', response.cases);
             },
@@ -76,9 +76,11 @@ function updateComponentList(type, components) {
             <div class="component-item ${isActive ? 'active' : ''}" data-id="${item.id}" data-type="${type}">
                 <img src="${item.image_url}" alt="${item.name}">
                 <h3>${item.name}</h3>
-                <p>Price: ${item.price}</p>
+                <p>Price: {item.price}₴</p>
             </div>
-                <a href="/${type}_detail/${item.id}/">View ${item.name}</a>
+            <div class ="component-item-view">
+                <a href="/${type}s/${item.id}/">View ${item.name}</a>
+            </div>
         `;
         listContainer.append(html);
     });
@@ -169,7 +171,7 @@ function saveBuild() {
     };
 
     $.ajax({
-        url: '/save_build/',
+        url: '/save_computer_build/',
         type: 'POST',
         data: data,
         headers: { "X-CSRFToken": getCSRFToken() },  // Ensure CSRF protection

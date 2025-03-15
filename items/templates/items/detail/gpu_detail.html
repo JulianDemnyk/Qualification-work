@@ -10,8 +10,8 @@
     <p>RAM: {{ gpu.gpu_ram }}</p>
     <p>RAM Type: {{ gpu.gpu_ram_type }}</p>
     <p>Power Consumption: {{ gpu.gpu_power_consumption }} W</p>
-    <p>Price: ${{ gpu.gpu_price }}</p>
+    <p>Price: {{ gpu.gpu_price }}₴</p>
     <p>Description: {{ gpu.gpu_description }}</p>
-{#    <a href="{% url 'gpu_list' %}">Back to GPUs</a>#}
+    <a href="{% url 'list_view_gpu' %}">Back to GPUs</a>
 </div>
 {% endblock %}

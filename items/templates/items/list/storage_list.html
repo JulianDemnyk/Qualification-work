@@ -1,0 +1,36 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div class="storage-list">
+
+        <div>
+
+            <form action="{% url 'list_view_storage' %}">
+                <input type="text" name="q" placeholder="Search for storage"/>
+            </form>
+
+            <h3><a href="{% url 'list_view_storage' %}">All Storages</a></h3>
+
+        </div>
+
+        <div>
+
+            <h4>{{ storage_count }} Storages found</h4>
+
+            <div class="storage-container">
+                {% for storage in storage_list %}
+                        <div class="item">
+                            <img class="image" src="{{ storage.storage_image.url }}" alt="{{ storage.storage_name }}"/>
+                            <p><a href="{% url 'detail_view_storage' storage.id %}">{{ storage.storage_name }}</a></p>
+                            <p>Price: {{ storage.storage_price }}₴</p>
+                        </div>
+                {% endfor %}
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

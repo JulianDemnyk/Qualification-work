@@ -7,8 +7,8 @@
     <p>Manufacturer: {{ cooling_system.cooling_system_manufacturer }}</p>
     <p>Socket: {{ cooling_system.cooling_system_socket }}</p>
     <p>TDP: {{ cooling_system.cooling_system_tdp }} W</p>
-    <p>Price: ${{ cooling_system.cooling_system_price }}</p>
+    <p>Price: {{ cooling_system.cooling_system_price }}₴</p>
     <p>Description: {{ cooling_system.cooling_system_description }}</p>
-{#    <a href="{% url 'cooling_system_list' %}">Back to Cooling Systems</a>#}
+    <a href="{% url 'list_view_cooling_system' %}">Back to Cooling Systems</a>
 </div>
 {% endblock %}

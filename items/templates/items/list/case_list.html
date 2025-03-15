@@ -1,0 +1,36 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div class="case-list">
+
+        <div>
+
+            <form action="{% url 'list_view_case' %}">
+                <input type="text" name="q" placeholder="Search for case"/>
+            </form>
+
+            <h3><a href="{% url 'list_view_case' %}">All Cases</a></h3>
+
+        </div>
+
+        <div>
+
+            <h4>{{ case_count }} Cases found</h4>
+
+            <div class="cases-container">
+                {% for case in case_list %}
+                        <div class="item">
+                            <img class="image" src="{{ case.case_image.url }}" alt="{{ case.case_name }}"/>
+                            <p><a href="{% url 'detail_view_case' case.id %}">{{ case.case_name }}</a></p>
+                            <p>Price: {{ case.case_price }}₴</p>
+                        </div>
+                {% endfor %}
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

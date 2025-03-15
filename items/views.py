@@ -5,35 +5,12 @@ from .models import Motherboard_model, Cpu_model, Ram_model, Cooling_system_mode
     Case_model, Storage_model, Computer_build
 
 
-# Create your views here.
 def home_view(request, *args, **kwargs):
     return render (request, "pages/base.html", {})
 
-
 def compatibility_page(request):
-    # Render the main compatibility page
-    cpus = Cpu_model.objects.all()
-    motherboards = Motherboard_model.objects.all()
-    ram_modules = Ram_model.objects.all()
-    cooling_systems = Cooling_system_model.objects.all()
-    gpus = Gpu_model.objects.all()
-    power_supplys = Power_supply_model.objects.all()
-    cases = Case_model.objects.all()
-    storages = Storage_model.objects.all()
+    return render(request, 'items/compatibility_page.html', {})
 
-    context = {
-        'cpus': cpus,
-        'motherboards': motherboards,
-        'ram_modules': ram_modules,
-        'cooling_systems': cooling_systems,
-        'gpus': gpus,
-        'power_supplys': power_supplys,
-        'cases': cases,
-        'storages': storages,
-    }
-    return render(request, 'items/compatibility_page.html', context)
-
-# Handle compatibility filtering for items
 def get_compatible_components(request):
     selected_cpu_id = request.GET.get('cpu_id')
     selected_motherboard_id = request.GET.get('motherboard_id')
@@ -54,7 +31,6 @@ def get_compatible_components(request):
 
     total_power_requirement = 200
 
-    # Filter items based on the selected CPU
     if selected_cpu_id:
         selected_cpu = get_object_or_404(Cpu_model, id=selected_cpu_id)
         compatible_motherboards = compatible_motherboards.filter(motherboard_socket=selected_cpu.cpu_socket)
@@ -119,11 +95,11 @@ def get_compatible_components(request):
     # Filter based on selected GPU
     if selected_gpu_id:
         selected_gpu = get_object_or_404(Gpu_model, id=selected_gpu_id)
+        total_power_requirement += selected_gpu.gpu_power_consumption
         compatible_power_supply = compatible_power_supply.filter(
             power_supply_power__gt=total_power_requirement + selected_gpu.gpu_power_consumption
         )
         compatible_gpus = compatible_gpus.filter(id=selected_gpu_id)
-        total_power_requirement += selected_gpu.gpu_power_consumption
 
     # Filter based on selected PSU
     if selected_power_supply_id:
@@ -154,15 +130,15 @@ def get_compatible_components(request):
         ],
         'motherboards': [
             {
-                'id': mb.id,
-                'name': mb.motherboard_name,
-                'socket': mb.motherboard_socket,
-                'price': mb.motherboard_price,
-                'image_url': mb.motherboard_image.url,
+                'id': motherboard.id,
+                'name': motherboard.motherboard_name,
+                'socket': motherboard.motherboard_socket,
+                'price': motherboard.motherboard_price,
+                'image_url': motherboard.motherboard_image.url,
             }
-            for mb in compatible_motherboards
+            for motherboard in compatible_motherboards
         ],
-        'ram': [
+        'rams': [
             {
                 'id': ram.id,
                 'name': ram.ram_name,
@@ -175,13 +151,13 @@ def get_compatible_components(request):
         ],
         'cooling_systems': [
             {
-                'id': cooling_sys.id,
-                'name': cooling_sys.cooling_system_name,
-                'socket': cooling_sys.cooling_system_socket,
-                'price': cooling_sys.cooling_system_price,
-                'image_url': cooling_sys.cooling_system_image.url,
+                'id': cooling_system.id,
+                'name': cooling_system.cooling_system_name,
+                'socket': cooling_system.cooling_system_socket,
+                'price': cooling_system.cooling_system_price,
+                'image_url': cooling_system.cooling_system_image.url,
             }
-            for cooling_sys in compatible_cooling_systems
+            for cooling_system in compatible_cooling_systems
         ],
         'gpus': [
             {
@@ -195,15 +171,15 @@ def get_compatible_components(request):
             }
             for gpu in compatible_gpus
         ],
-        'power_supply': [
+        'power_supplys': [
             {
-                'id': power_sup.id,
-                'name': power_sup.power_supply_name,
-                'power': power_sup.power_supply_power,
-                'price': power_sup.power_supply_price,
-                'image_url': power_sup.power_supply_image.url,
+                'id': power_supply.id,
+                'name': power_supply.power_supply_name,
+                'power': power_supply.power_supply_power,
+                'price': power_supply.power_supply_price,
+                'image_url': power_supply.power_supply_image.url,
             }
-            for power_sup in compatible_power_supply
+            for power_supply in compatible_power_supply
         ],
         'cases': [
             {
@@ -294,7 +270,7 @@ def list_view_cpu(request):
     q=request.GET.get('q') if request.GET.get('q') is not None else ''
 
     cpu = Cpu_model.objects.filter(
-        Q(cpu_name=q)|
+        Q(cpu_name__contains=q)|
         Q(cpu_manufacturer__contains=q)|
         Q(cpu_socket__contains=q)|
         Q(cpu_description__contains=q)
@@ -315,12 +291,51 @@ def detail_view_motherboard(request, id):
     }
     return render(request, 'items/detail/motherboard_detail.html', context)
 
+def list_view_motherboard(request):
+    q=request.GET.get('q') if request.GET.get('q') is not None else ''
+
+    motherboard = Motherboard_model.objects.filter(
+        Q(motherboard_name__contains=q)|
+        Q(motherboard_manufacturer__contains=q)|
+        Q(motherboard_socket__contains=q)|
+        Q(motherboard_chipset__contains=q) |
+        Q(motherboard_form_factor__contains=q) |
+        Q(motherboard_ram_type__contains=q) |
+        Q(motherboard_description__contains=q)
+    )
+
+    motherboard_count = motherboard.count()
+
+    context = {
+        'motherboard_list': motherboard,
+        'motherboard_count': motherboard_count,
+    }
+    return render(request, "items/list/motherboard_list.html", context)
+
 def detail_view_gpu(request, id):
     gpu = get_object_or_404(Gpu_model, id=id)
     context = {
         'gpu': gpu,
     }
     return render(request, 'items/detail/gpu_detail.html', context)
+
+def list_view_gpu(request):
+    q=request.GET.get('q') if request.GET.get('q') is not None else ''
+
+    gpu = Gpu_model.objects.filter(
+        Q(gpu_name__contains=q)|
+        Q(gpu_manufacturer__contains=q)|
+        Q(gpu_ram_type__contains=q)|
+        Q(gpu_description__contains=q)
+    )
+
+    gpu_count = gpu.count()
+
+    context = {
+        'gpu_list': gpu,
+        'gpu_count': gpu_count,
+    }
+    return render(request, "items/list/gpu_list.html", context)
 
 def detail_view_ram(request, id):
     ram = get_object_or_404(Ram_model, id=id)
@@ -329,12 +344,52 @@ def detail_view_ram(request, id):
     }
     return render(request, 'items/detail/ram_detail.html', context)
 
+def list_view_ram(request):
+    q=request.GET.get('q') if request.GET.get('q') is not None else ''
+
+    ram = Ram_model.objects.filter(
+        Q(ram_name__contains=q)|
+        Q(ram_manufacturer__contains=q)|
+        Q(ram_type__contains=q)|
+        Q(ram_size__contains=q)|
+        Q(ram_amount__contains=q) |
+        Q(ram_description__contains=q)
+    )
+
+    ram_count = ram.count()
+
+    context = {
+        'ram_list': ram,
+        'ram_count': ram_count,
+    }
+    return render(request, "items/list/ram_list.html", context)
+
 def detail_view_storage(request, id):
     storage = get_object_or_404(Storage_model, id=id)
     context = {
         'storage': storage,
     }
     return render(request, 'items/detail/storage_detail.html', context)
+
+def list_view_storage(request):
+    q=request.GET.get('q') if request.GET.get('q') is not None else ''
+
+    storage = Storage_model.objects.filter(
+        Q(storage_name__contains=q)|
+        Q(storage_manufacturer__contains=q)|
+        Q(storage_type__contains=q)|
+        Q(storage_capacity__contains=q)|
+        Q(storage_connection__contains=q) |
+        Q(storage_description__contains=q)
+    )
+
+    storage_count = storage.count()
+
+    context = {
+        'storage_list': storage,
+        'storage_count': storage_count,
+    }
+    return render(request, "items/list/storage_list.html", context)
 
 def detail_view_cooling_system(request, id):
     cooling_system = get_object_or_404(Cooling_system_model, id=id)
@@ -343,12 +398,50 @@ def detail_view_cooling_system(request, id):
     }
     return render(request, 'items/detail/cooling_system_detail.html', context)
 
+def list_view_cooling_system(request):
+    q=request.GET.get('q') if request.GET.get('q') is not None else ''
+
+    cooling_system = Cooling_system_model.objects.filter(
+        Q(cooling_system_name__contains=q)|
+        Q(cooling_system_manufacturer__contains=q)|
+        Q(cooling_system_socket__contains=q)|
+        Q(cooling_system_tdp__contains=q)|
+        Q(cooling_system_description__contains=q)
+    )
+
+    cooling_system_count = cooling_system.count()
+
+    context = {
+        'cooling_system_list': cooling_system,
+        'cooling_system_count': cooling_system_count,
+    }
+    return render(request, "items/list/cooling_system_list.html", context)
+
 def detail_view_power_supply(request, id):
     power_supply = get_object_or_404(Power_supply_model, id=id)
     context = {
         'power_supply': power_supply,
     }
     return render(request, 'items/detail/power_supply_detail.html', context)
+
+def list_view_power_supply(request):
+    q=request.GET.get('q') if request.GET.get('q') is not None else ''
+
+    power_supply = Power_supply_model.objects.filter(
+        Q(power_supply_name__contains=q)|
+        Q(power_supply_manufacturer__contains=q)|
+        Q(power_supply_power__contains=q)|
+        Q(power_supply_form_factor__contains=q)|
+        Q(power_supply_description__contains=q)
+    )
+
+    power_supply_count = power_supply.count()
+
+    context = {
+        'power_supply_list': power_supply,
+        'power_supply_count': power_supply_count,
+    }
+    return render(request, "items/list/power_supply_list.html", context)
 
 def detail_view_case(request, id):
     case = get_object_or_404(Case_model, id=id)
@@ -357,119 +450,21 @@ def detail_view_case(request, id):
     }
     return render(request, 'items/detail/case_detail.html', context)
 
-def fetch_all_cpus(request):
-    cpus = Cpu_model.objects.all()
-    response = [
-        {
-            'id': cpu.id,
-            'name': cpu.cpu_name,
-            'socket': cpu.cpu_socket,
-            'price': cpu.cpu_price,
-            'image_url': cpu.cpu_image.url,
-        }
-        for cpu in cpus
-    ]
-    return JsonResponse({'cpus': response})
+def list_view_case(request):
+    q=request.GET.get('q') if request.GET.get('q') is not None else ''
 
-def fetch_all_motherboards(request):
-    motherboards = Motherboard_model.objects.all()
-    response = [
-        {
-            'id': mb.id,
-            'name': mb.motherboard_name,
-            'socket': mb.motherboard_socket,
-            'price': mb.motherboard_price,
-            'image_url': mb.motherboard_image.url,
-        }
-        for mb in motherboards
-    ]
-    return JsonResponse({'motherboards': response})
+    case = Case_model.objects.filter(
+        Q(case_name__contains=q)|
+        Q(case_manufacturer__contains=q)|
+        Q(case_size__contains=q)|
+        Q(case_form_factor__contains=q)|
+        Q(case_description__contains=q)
+    )
 
-def fetch_all_rams(request):
-    ram_modules = Ram_model.objects.all()
-    response = [
-        {
-            'id': ram.id,
-            'name': ram.ram_name,
-            'type': ram.ram_type,
-            'amount': ram.ram_amount,
-            'price': ram.ram_price,
-            'image_url': ram.ram_image.url,
-        }
-        for ram in ram_modules
-    ]
-    return JsonResponse({'ram_modules': response})
+    case_count = case.count()
 
-def fetch_all_cooling_systems(request):
-    cooling_systems = Cooling_system_model.objects.all()
-    response = [
-        {
-            'id': cooling_sys.id,
-            'name': cooling_sys.cooling_system_name,
-            'price': cooling_sys.cooling_system_price,
-            'sockets': cooling_sys.cooling_system_socket,
-            'image_url': cooling_sys.cooling_system_image.url,
-        }
-        for cooling_sys in cooling_systems
-    ]
-    return JsonResponse({'cooling_systems': response})
-
-def fetch_all_gpus(request):
-    gpus = Gpu_model.objects.all()
-    response = [
-        {
-            'id': gpu.id,
-            'name': gpu.gpu_name,
-            'ram': gpu.gpu_ram,
-            'ram_type': gpu.gpu_ram_type,
-            'bits': gpu.gpu_bits,
-            'price': gpu.gpu_price,
-            'image_url': gpu.gpu_image.url,
-        }
-        for gpu in gpus
-    ]
-    return JsonResponse({'gpus': response})
-
-def fetch_all_power_supplies(request):
-    power_supply = Power_supply_model.objects.all()
-    response = [
-        {
-            'id': power_sup.id,
-            'name': power_sup.power_supply_name,
-            'power': power_sup.power_supply_power,
-            'price': power_sup.power_supply_price,
-            'image_url': power_sup.power_supply_image.url,
-        }
-        for power_sup in power_supply
-    ]
-    return JsonResponse({'power_supply': response})
-
-def fetch_all_cases(request):
-    cases = Case_model.objects.all()
-    response = [
-        {
-            'id': case.id,
-            'name': case.case_name,
-            'size': case.case_size,
-            'price': case.case_price,
-            'image_url': case.case_image.url,
-        }
-        for case in cases
-    ]
-    return JsonResponse({'cases': response})
-
-def fetch_all_storages(request):
-    storages = Storage_model.objects.all()
-    response = [
-        {
-            'id': storage.id,
-            'name': storage.storage_name,
-            'type': storage.storage_type,
-            'capacity': storage.storage_capacity,
-            'speed': storage.storage_speed,
-            'price': storage.storage_price,
-            'image_url': storage.storage_image.url,
-        }
-        for storage in storages
-    ]
-    return JsonResponse({'storages': response})
+    context = {
+        'case_list': case,
+        'case_count': case_count,
+    }
+    return render(request, "items/list/case_list.html", context)

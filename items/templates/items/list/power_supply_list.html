@@ -1,0 +1,36 @@
+{% extends 'pages/base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div class="power-supply-list">
+
+        <div>
+
+            <form action="{% url 'list_view_power_supply' %}">
+                <input type="text" name="q" placeholder="Search for power supply"/>
+            </form>
+
+            <h3><a href="{% url 'list_view_power_supply' %}">All Power supplys</a></h3>
+
+        </div>
+
+        <div>
+
+            <h4>{{ power_supply_count }} Power supplys found</h4>
+
+            <div class="power-supply-container">
+                {% for power_supply in power_supply_list %}
+                        <div class="item">
+                            <img class="image" src="{{ power_supply.power_supply_image.url }}" alt="{{ power_supply.power_supply_name }}"/>
+                            <p><a href="{% url 'detail_view_power_supply' power_supply.id %}">{{ power_supply.power_supply_name }}</a></p>
+                            <p>Price: {{ power_supply.power_supply_price }}₴</p>
+                        </div>
+                {% endfor %}
+            </div>
+
+        </div>
+
+    </div>
+
+{% endblock %}

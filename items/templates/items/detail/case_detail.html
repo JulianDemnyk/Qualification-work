@@ -9,8 +9,8 @@
     <p>Size: {{ case.case_size }}</p>
     <p>Power Supply Form Factor: {{ case.case_power_supply_form_factor }}</p>
     <p>Number of Fans: {{ case.case_fan }}</p>
-    <p>Price: ${{ case.case_price }}</p>
+    <p>Price: {{ case.case_price }}₴</p>
     <p>Description: {{ case.case_description }}</p>
-{#    <a href="{% url 'case_list' %}">Back to Cases</a>#}
+    <a href="{% url 'list_view_case' %}">Back to Cases</a>
 </div>
 {% endblock %}

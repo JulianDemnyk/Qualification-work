@@ -13,8 +13,8 @@
     <p>SATA Slots: {{ motherboard.motherboard_sata_slot }}</p>
     <p>M.2 Slots: {{ motherboard.motherboard_m2_slot }}</p>
     <p>Form Factor: {{ motherboard.motherboard_form_factor }}</p>
-    <p>Price: ${{ motherboard.motherboard_price }}</p>
+    <p>Price: {{ motherboard.motherboard_price }}₴</p>
     <p>Description: {{ motherboard.motherboard_description }}</p>
-{#    <a href="{% url 'motherboard_list' %}">Back to Motherboards</a>#}
+    <a href="{% url 'list_view_motherboard' %}">Back to Motherboards</a>
 </div>
 {% endblock %}
