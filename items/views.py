@@ -29,7 +29,7 @@ def get_compatible_components(request):
     compatible_cases = Case_model.objects.all()
     compatible_storages = Storage_model.objects.all()
 
-    total_power_requirement = 200
+    total_power_requirement = 100
 
     if selected_cpu_id:
         selected_cpu = get_object_or_404(Cpu_model, id=selected_cpu_id)
@@ -241,6 +241,7 @@ def save_computer_build(request):
 
             # Save the build to the database
             build = Computer_build.objects.create(
+                owner=request.user,
                 cpu=cpu,
                 motherboard=motherboard,
                 gpu=gpu,
@@ -468,3 +469,17 @@ def list_view_case(request):
         'case_count': case_count,
     }
     return render(request, "items/list/case_list.html", context)
+
+def user_profile(request):
+    builds = Computer_build.objects.filter(owner=request.user)
+    context = {
+        'builds': builds,
+    }
+    return render(request, "pages/profile.html", context)
+
+def detail_view_build(request, id):
+    build = get_object_or_404(Computer_build, id=id)
+    context = {
+        'build': build,
+    }
+    return render(request, 'items/detail/computer_build_detail.html', context)

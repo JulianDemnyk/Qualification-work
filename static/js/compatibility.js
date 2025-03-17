@@ -76,7 +76,7 @@ function updateComponentList(type, components) {
             <div class="component-item ${isActive ? 'active' : ''}" data-id="${item.id}" data-type="${type}">
                 <img src="${item.image_url}" alt="${item.name}">
                 <h3>${item.name}</h3>
-                <p>Price: {item.price}₴</p>
+                <p>Price: ${item.price}₴</p>
             </div>
             <div class ="component-item-view">
                 <a href="/${type}s/${item.id}/">View ${item.name}</a>

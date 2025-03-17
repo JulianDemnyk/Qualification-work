@@ -1,0 +1,20 @@
+{% extends "pages/base.html" %}
+
+{% block content %}
+<div class="profile container">
+    <h1>{{ request.user.username }}'s Profile</h1>
+    <h2>Your Computer Builds</h2>
+
+    {% if builds %}
+            {% for build in builds %}
+                <a href="{% url 'detail_view_build' build.id %}"><img src="{{ build.case.case_image.url }}" alt="{{ build.case.case_name }}"></a>
+                <p>Build №{{ forloop.counter }}</p>
+                <p>Total Price: ${{ build.price }}</p>
+                <a href="{% url 'detail_view_build' build.id %}">View Full Build</a>
+                <hr>
+            {% endfor %}
+    {% else %}
+        <p>You have no saved builds yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 # Create your models here.
@@ -116,12 +117,13 @@ class Case_model(models.Model):
         return self.case_name
 
 class Computer_build(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
     cpu = models.ForeignKey(Cpu_model, on_delete=models.CASCADE)
     motherboard = models.ForeignKey(Motherboard_model, on_delete=models.CASCADE)
     gpu = models.ForeignKey(Gpu_model, on_delete=models.CASCADE)
     ram = models.ForeignKey(Ram_model, on_delete=models.CASCADE)
     storage = models.ForeignKey(Storage_model, on_delete=models.CASCADE)
     cooling_system = models.ForeignKey(Cooling_system_model, on_delete=models.CASCADE)
-    power = models.ForeignKey(Power_supply_model, on_delete=models.CASCADE)
+    power_supply = models.ForeignKey(Power_supply_model, on_delete=models.CASCADE)
     case = models.ForeignKey(Case_model, on_delete=models.CASCADE)
     price = models.IntegerField()

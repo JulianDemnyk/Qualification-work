@@ -19,13 +19,16 @@ from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
 from items import views
+from items.views import user_profile
 
 urlpatterns = [
         path('admin/', admin.site.urls),
         path('', views.home_view, name='home'),
+        path('profile', user_profile, name='profile'),
         path('compatibility/', views.compatibility_page, name='compatibility_page'),
         path('save_computer_build/', views.save_computer_build, name='save_computer_build'),
         path('get_compatible_components/', views.get_compatible_components, name='get_compatible_components'),
+        path('builds/<int:id>/', views.detail_view_build, name='detail_view_build'),
         path('cpus/<int:id>/', views.detail_view_cpu, name='detail_view_cpu'),
         path('cpus/', views.list_view_cpu, name='list_view_cpu'),
         path('motherboards/<int:id>/', views.detail_view_motherboard, name='detail_view_motherboard'),
