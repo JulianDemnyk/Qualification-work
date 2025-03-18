@@ -1,20 +1,22 @@
 {% extends "pages/base.html" %}
 
 {% block content %}
-<div class="container">
-    <h1>{{ motherboard.motherboard_name }}</h1>
-    <img src="{{ motherboard.motherboard_image.url }}" alt="{{ motherboard.motherboard_name }}">
-    <p>Manufacturer: {{ motherboard.motherboard_manufacturer }}</p>
-    <p>Socket: {{ motherboard.motherboard_socket }}</p>
-    <p>Chipset: {{ motherboard.motherboard_chipset }}</p>
-    <p>RAM Type: {{ motherboard.motherboard_ram_type }}</p>
-    <p>RAM Slots: {{ motherboard.motherboard_ram_slot }}</p>
-    <p>PCI Slots: {{ motherboard.motherboard_pci_slot }}</p>
-    <p>SATA Slots: {{ motherboard.motherboard_sata_slot }}</p>
-    <p>M.2 Slots: {{ motherboard.motherboard_m2_slot }}</p>
-    <p>Form Factor: {{ motherboard.motherboard_form_factor }}</p>
-    <p>Price: {{ motherboard.motherboard_price }}₴</p>
-    <p>Description: {{ motherboard.motherboard_description }}</p>
-    <a href="{% url 'list_view_motherboard' %}">Back to Motherboards</a>
-</div>
+
+    <div class="container">
+        <h1>{{ motherboard.motherboard_name }}</h1>
+        <img src="{{ motherboard.motherboard_image.url }}" alt="{{ motherboard.motherboard_name }}">
+        <p>Manufacturer: {{ motherboard.motherboard_manufacturer }}</p>
+        <p>Socket: {{ motherboard.motherboard_socket }}</p>
+        <p>Chipset: {{ motherboard.motherboard_chipset }}</p>
+        <p>RAM Type: {{ motherboard.motherboard_ram_type }}</p>
+        <p>RAM Slots: {{ motherboard.motherboard_ram_slot }}</p>
+        <p>PCI Slots: {{ motherboard.motherboard_pci_slot }}</p>
+        <p>SATA Slots: {{ motherboard.motherboard_sata_slot }}</p>
+        <p>M.2 Slots: {{ motherboard.motherboard_m2_slot }}</p>
+        <p>Form Factor: {{ motherboard.motherboard_form_factor }}</p>
+        <p>Price: {{ motherboard.motherboard_price }}₴</p>
+        <p>Description: {{ motherboard.motherboard_description }}</p>
+        <a href="{% url 'list_view_motherboard' %}">Back to Motherboards</a>
+    </div>
+
 {% endblock %}

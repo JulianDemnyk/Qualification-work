@@ -1,6 +1,11 @@
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
 from django.db.models import Q
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import JsonResponse
+from pyexpat.errors import messages
+
 from .models import Motherboard_model, Cpu_model, Ram_model, Cooling_system_model, Gpu_model, Power_supply_model, \
     Case_model, Storage_model, Computer_build
 
@@ -8,8 +13,10 @@ from .models import Motherboard_model, Cpu_model, Ram_model, Cooling_system_mode
 def home_view(request, *args, **kwargs):
     return render (request, "pages/base.html", {})
 
+
 def compatibility_page(request):
     return render(request, 'items/compatibility_page.html', {})
+
 
 def get_compatible_components(request):
     selected_cpu_id = request.GET.get('cpu_id')
@@ -44,12 +51,10 @@ def get_compatible_components(request):
 
         compatible_cpus = compatible_cpus.filter(id=selected_cpu_id)
 
-    # Filter items based on the selected motherboard
     if selected_motherboard_id:
         selected_motherboard = get_object_or_404(Motherboard_model, id=selected_motherboard_id)
         compatible_cpus = compatible_cpus.filter(cpu_socket=selected_motherboard.motherboard_socket)
 
-        # Filter RAM based on motherboard compatibility
         compatible_ram = compatible_ram.filter(
             ram_type=selected_motherboard.motherboard_ram_type,
             ram_amount__lte=selected_motherboard.motherboard_ram_slot
@@ -65,7 +70,6 @@ def get_compatible_components(request):
 
         compatible_motherboards = compatible_motherboards.filter(id=selected_motherboard_id)
 
-    # Filter based on selected RAM
     if selected_ram_id:
         selected_ram = get_object_or_404(Ram_model, id=selected_ram_id)
         compatible_motherboards = compatible_motherboards.filter(
@@ -75,7 +79,6 @@ def get_compatible_components(request):
 
         compatible_ram = compatible_ram.filter(id=selected_ram_id)
 
-    # Filter based on selected cooling system
     if selected_cooling_system_id:
         selected_cooling_system = get_object_or_404(Cooling_system_model, id=selected_cooling_system_id)
         cooling_system_sockets = [socket.strip() for socket in selected_cooling_system.cooling_system_socket.split(',')]
@@ -92,16 +95,15 @@ def get_compatible_components(request):
 
         compatible_cooling_systems = compatible_cooling_systems.filter(id=selected_cooling_system_id)
 
-    # Filter based on selected GPU
     if selected_gpu_id:
         selected_gpu = get_object_or_404(Gpu_model, id=selected_gpu_id)
         total_power_requirement += selected_gpu.gpu_power_consumption
         compatible_power_supply = compatible_power_supply.filter(
             power_supply_power__gt=total_power_requirement + selected_gpu.gpu_power_consumption
         )
+
         compatible_gpus = compatible_gpus.filter(id=selected_gpu_id)
 
-    # Filter based on selected PSU
     if selected_power_supply_id:
         selected_power_supply = get_object_or_404(Power_supply_model, id=selected_power_supply_id)
         compatible_gpus = compatible_gpus.filter(gpu_power_consumption__lt=selected_power_supply.power_supply_power)
@@ -206,6 +208,7 @@ def get_compatible_components(request):
     })
 
 
+@login_required(login_url='login/')
 def save_computer_build(request):
     if request.method == 'POST':
         cpu_id = request.POST.get('cpu')
@@ -217,11 +220,9 @@ def save_computer_build(request):
         power_supply_id = request.POST.get('power_supply')
         case_id = request.POST.get('case')
 
-        # Validate that all items are selected
         if not all([cpu_id, motherboard_id, gpu_id, ram_id, storage_id, cooling_system_id, power_supply_id, case_id]):
             return JsonResponse({'status': 'error', 'message': 'All items must be selected'})
 
-        # Get the component objects from the database
         try:
             cpu = Cpu_model.objects.get(id=cpu_id)
             motherboard = Motherboard_model.objects.get(id=motherboard_id)
@@ -232,14 +233,12 @@ def save_computer_build(request):
             power_supply = Power_supply_model.objects.get(id=power_supply_id)
             case = Case_model.objects.get(id=case_id)
 
-            # Calculate total price
             total_price = (
                 cpu.cpu_price + motherboard.motherboard_price + gpu.gpu_price +
                 ram.ram_price + storage.storage_price + cooling_system.cooling_system_price +
                 power_supply.power_supply_price + case.case_price
             )
 
-            # Save the build to the database
             build = Computer_build.objects.create(
                 owner=request.user,
                 cpu=cpu,
@@ -248,7 +247,7 @@ def save_computer_build(request):
                 ram=ram,
                 storage=storage,
                 cooling_system=cooling_system,
-                power=power_supply,
+                power_supply=power_supply,
                 case=case,
                 price=total_price
             )
@@ -266,6 +265,7 @@ def detail_view_cpu(request, id):
         'cpu': cpu,
     }
     return render(request, 'items/detail/cpu_detail.html', context)
+
 
 def list_view_cpu(request):
     q=request.GET.get('q') if request.GET.get('q') is not None else ''
@@ -285,12 +285,14 @@ def list_view_cpu(request):
     }
     return render(request, "items/list/cpu_list.html", context)
 
+
 def detail_view_motherboard(request, id):
     motherboard = get_object_or_404(Motherboard_model, id=id)
     context = {
         'motherboard': motherboard,
     }
     return render(request, 'items/detail/motherboard_detail.html', context)
+
 
 def list_view_motherboard(request):
     q=request.GET.get('q') if request.GET.get('q') is not None else ''
@@ -313,12 +315,14 @@ def list_view_motherboard(request):
     }
     return render(request, "items/list/motherboard_list.html", context)
 
+
 def detail_view_gpu(request, id):
     gpu = get_object_or_404(Gpu_model, id=id)
     context = {
         'gpu': gpu,
     }
     return render(request, 'items/detail/gpu_detail.html', context)
+
 
 def list_view_gpu(request):
     q=request.GET.get('q') if request.GET.get('q') is not None else ''
@@ -338,12 +342,14 @@ def list_view_gpu(request):
     }
     return render(request, "items/list/gpu_list.html", context)
 
+
 def detail_view_ram(request, id):
     ram = get_object_or_404(Ram_model, id=id)
     context = {
         'ram': ram,
     }
     return render(request, 'items/detail/ram_detail.html', context)
+
 
 def list_view_ram(request):
     q=request.GET.get('q') if request.GET.get('q') is not None else ''
@@ -365,12 +371,14 @@ def list_view_ram(request):
     }
     return render(request, "items/list/ram_list.html", context)
 
+
 def detail_view_storage(request, id):
     storage = get_object_or_404(Storage_model, id=id)
     context = {
         'storage': storage,
     }
     return render(request, 'items/detail/storage_detail.html', context)
+
 
 def list_view_storage(request):
     q=request.GET.get('q') if request.GET.get('q') is not None else ''
@@ -392,12 +400,14 @@ def list_view_storage(request):
     }
     return render(request, "items/list/storage_list.html", context)
 
+
 def detail_view_cooling_system(request, id):
     cooling_system = get_object_or_404(Cooling_system_model, id=id)
     context = {
         'cooling_system': cooling_system,
     }
     return render(request, 'items/detail/cooling_system_detail.html', context)
+
 
 def list_view_cooling_system(request):
     q=request.GET.get('q') if request.GET.get('q') is not None else ''
@@ -418,12 +428,14 @@ def list_view_cooling_system(request):
     }
     return render(request, "items/list/cooling_system_list.html", context)
 
+
 def detail_view_power_supply(request, id):
     power_supply = get_object_or_404(Power_supply_model, id=id)
     context = {
         'power_supply': power_supply,
     }
     return render(request, 'items/detail/power_supply_detail.html', context)
+
 
 def list_view_power_supply(request):
     q=request.GET.get('q') if request.GET.get('q') is not None else ''
@@ -444,12 +456,14 @@ def list_view_power_supply(request):
     }
     return render(request, "items/list/power_supply_list.html", context)
 
+
 def detail_view_case(request, id):
     case = get_object_or_404(Case_model, id=id)
     context = {
         'case': case,
     }
     return render(request, 'items/detail/case_detail.html', context)
+
 
 def list_view_case(request):
     q=request.GET.get('q') if request.GET.get('q') is not None else ''
@@ -470,6 +484,8 @@ def list_view_case(request):
     }
     return render(request, "items/list/case_list.html", context)
 
+
+@login_required(login_url='login/')
 def user_profile(request):
     builds = Computer_build.objects.filter(owner=request.user)
     context = {
@@ -477,9 +493,54 @@ def user_profile(request):
     }
     return render(request, "pages/profile.html", context)
 
+
+@login_required(login_url='login/')
 def detail_view_build(request, id):
     build = get_object_or_404(Computer_build, id=id)
     context = {
         'build': build,
     }
     return render(request, 'items/detail/computer_build_detail.html', context)
+
+
+def login_page(request):
+    page='login'
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user=authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.error(request, 'Username or password does not exist.')
+
+    context = {
+        'page': page,
+    }
+    return render(request, 'pages/login_sign_up.html', context)
+
+
+def sign_up_page(request):
+    page='sign_up'
+
+    form=UserCreationForm()
+
+    if request.method == "POST":
+        form=UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+
+    context = {
+        'page': page,
+        'form': form,
+    }
+    return render(request, 'pages/login_sign_up.html', context)
+
+
+def logout_page(request):
+    logout(request)
+    return redirect('home')

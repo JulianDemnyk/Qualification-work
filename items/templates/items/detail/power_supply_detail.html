@@ -1,14 +1,16 @@
 {% extends "pages/base.html" %}
 
 {% block content %}
-<div class="container">
-    <h1>{{ power_supply.power_supply_name }}</h1>
-    <img src="{{ power_supply.power_supply_image.url }}" alt="{{ power_supply.power_supply_name }}">
-    <p>Manufacturer: {{ power_supply.power_supply_manufacturer }}</p>
-    <p>Power: {{ power_supply.power_supply_power }} W</p>
-    <p>Form Factor: {{ power_supply.power_supply_form_factor }}</p>
-    <p>Price: {{ power_supply.power_supply_price }}₴</p>
-    <p>Description: {{ power_supply.power_supply_description }}</p>
-    <a href="{% url 'list_view_power_supply' %}">Back to Power Supplies</a>
-</div>
+
+    <div class="container">
+        <h1>{{ power_supply.power_supply_name }}</h1>
+        <img src="{{ power_supply.power_supply_image.url }}" alt="{{ power_supply.power_supply_name }}">
+        <p>Manufacturer: {{ power_supply.power_supply_manufacturer }}</p>
+        <p>Power: {{ power_supply.power_supply_power }} W</p>
+        <p>Form Factor: {{ power_supply.power_supply_form_factor }}</p>
+        <p>Price: {{ power_supply.power_supply_price }}₴</p>
+        <p>Description: {{ power_supply.power_supply_description }}</p>
+        <a href="{% url 'list_view_power_supply' %}">Back to Power Supplies</a>
+    </div>
+
 {% endblock %}

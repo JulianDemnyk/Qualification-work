@@ -1,0 +1,21 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'pages/navbar.css' %}">
+<nav class="navigation">
+        <ul class="navigation-list">
+        
+            <li class="logo">
+                <h1 class="temp-logo-text">
+                <a href="{% url 'home' %}">Computer Builds</a>
+                </h1>
+            </li>
+        
+            <li><a class="list-link" href="{% url 'compatibility_page' %}">Configuration</a></li>
+            {% if request.user.is_authenticated %}
+                <li><a class="list-link" href="{% url 'profile' %}">Profile</a></li>
+                <li><a class="list-link" href="{% url 'logout' %}">Logout</a></li>
+            {% else %}
+                <li><a class="list-link" href="{% url 'login' %}">Login</a></li>
+            {% endif %}
+
+        </ul>
+    </nav>

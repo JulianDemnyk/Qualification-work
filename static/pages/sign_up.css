@@ -1,0 +1,81 @@
+form {
+    max-width: 400px;
+    margin: 80px auto 0 auto;
+    background: #2B365E;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    font-family: 'Helvetica', sans-serif;
+}
+
+
+form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+form input[type="text"],
+form input[type="password"] {
+    width: 100%;
+    padding: 10px 0px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+    color: #000;
+    font-size: 14px;
+}
+
+form input[type="submit"] {
+    background: #ffffff;
+    color: #273469;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+form input[type="submit"]:hover {
+    background: #ffffff;
+}
+
+form .helptext {
+    font-size: 12px;
+    color: #cccccc;
+    margin-bottom: 10px;
+    display: block;
+}
+
+form ul.errorlist {
+    color: #ffffff;
+    padding-left: 0;
+    list-style: none;
+    margin-bottom: 10px;
+}
+
+form ul:not(.errorlist) {
+    font-size: 12px;
+    margin: 0 0 15px 0;
+    padding-left: 0;
+    list-style: none;
+    color: #cccccc;
+}
+
+form p {
+    margin-top: 20px;
+}
+
+form a {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+form a:hover {
+    color: #ffffff;
+}

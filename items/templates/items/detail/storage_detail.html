@@ -1,6 +1,7 @@
 {% extends "pages/base.html" %}
 
 {% block content %}
+
 <div class="container">
     <h1>{{ storage.storage_name }}</h1>
     <img src="{{ storage.storage_image.url }}" alt="{{ storage.storage_name }}">
@@ -13,4 +14,5 @@
     <p>Description: {{ storage.storage_description }}</p>
     <a href="{% url 'list_view_storage' %}">Back to Storage</a>
 </div>
+
 {% endblock %}

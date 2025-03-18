@@ -1,41 +1,79 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PC Configurator</title>
+    <link rel="stylesheet" href="{% static 'pages/base.css' %}">
 </head>
 <body>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="../../../../../../../../../../">PC Configurator</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="">CPUs</a></li>
-                    <li class="nav-item"><a class="nav-link" href="">Motherboards</a></li>
-                    <li class="nav-item"><a class="nav-link" href="">GPUs</a></li>
-                </ul>
+    {% include 'pages/navbar.html' %}
+
+    {% block content %}
+        
+    <div class="hero-section">
+        <div class="hero-background">
+            <img src="media\pagehome\amd-ryzen-5-5600-3544ghz-32mb-sam4-tray-100-000000927.png" alt="Background Image" class="background-image">
+        </div>
+        <div class="hero-content">
+            <h1 class="hero-title">Build your dream computer</h1>
+            <p class="hero-subtitle">Select each component by yourself for yourself</p>
+            <a href="{% url 'compatibility_page' %}" class="cta-button">Start configuring</a>
+        </div>
+    </div>
+        
+    <section class="section our-products">
+        <h2 class="section-title">Our Components</h2>
+        <p class="section-text">We offer a complete selection of PC hardware to build custom rigs or upgrade existing systems. Explore our premium components:</p>
+        <div class="product-grid">
+            <div class="product-card">
+                <a href="{% url 'list_view_cpu' %}"><img src="" alt="CPU" class="product-image"></a>
+                <h3 class="product-name"><a href="{% url 'list_view_cpu' %}">Processors</a></h3>
+                <p class="product-description">High-performance multi-core processors for gaming, workstations, and everyday computing.</p>
+            </div>
+            <div class="product-card">
+                <a href="{% url 'list_view_gpu' %}"><img src="" alt="GPU" class="product-image"></a>
+                <h3 class="product-name"><a href="{% url 'list_view_gpu' %}">Graphic cards</a></h3>
+                <p class="product-description">Top-tier graphics cards delivering exceptional visuals and powerful rendering capabilities.</p>
+            </div>
+            <div class="product-card">
+                <a href="{% url 'list_view_ram' %}"><img src="" alt="RAM" class="product-image"></a>
+                <h3 class="product-name"><a href="{% url 'list_view_ram' %}">Memory</a></h3>
+                <p class="product-description">High-speed RAM modules designed to handle multitasking and demanding applications.</p>
+            </div>
+            <div class="product-card">
+                <a href="{% url 'list_view_storage' %}"><img src="" alt="Storage" class="product-image"></a>
+                <h3 class="product-name"><a href="{% url 'list_view_storage' %}">Storages</a></h3>
+                <p class="product-description">Fast and reliable storage solutions to drastically reduce load and boot times.</p>
+            </div>
+            <div class="product-card">
+                <a href="{% url 'list_view_motherboard' %}"><img src="" alt="Motherboard" class="product-image"></a>
+                <h3 class="product-name"><a href="{% url 'list_view_motherboard' %}">Motherboard</a></h3>
+                <p class="product-description">Versatile and feature-rich boards to connect and power all your components efficiently.</p>
+            </div>
+            <div class="product-card">
+                <a href="{% url 'list_view_power_supply' %}"><img src="" alt="Power supply" class="product-image"></a>
+                <h3 class="product-name"><a href="{% url 'list_view_power_supply' %}">Power supplys</a></h3>
+                <p class="product-description">Reliable and efficient power units to ensure stable and safe system operation.</p>
+            </div>
+            <div class="product-card">
+                <a href="{% url 'list_view_case' %}"><img src="" alt="Case" class="product-image"></a>
+                <h3 class="product-name"><a href="{% url 'list_view_case' %}">Cases</a></h3>
+                <p class="product-description">Stylish and spacious cases with optimal airflow and cable management.</p>
+            </div>
+            <div class="product-card">
+                <a href="{% url 'list_view_cooling_system' %}"><img src="" alt="Cooling system" class="product-image"></a>
+                <h3 class="product-name"><a href="{% url 'list_view_cooling_system' %}">Cooling systems</a></h3>
+                <p class="product-description">Air and liquid cooling solutions to maintain optimal system temperatures under load.</p>
             </div>
         </div>
-    </nav>
+    </section>
 
-    <!-- Main Content -->
-    <div class="container mt-4">
-        {% block content %}
+    {% endblock %}
 
-        {% endblock %}
-    </div>
+    {% include 'pages/footer.html' %}
 
-    <!-- Footer -->
-    <footer class="bg-dark text-white text-center py-3 mt-4">
-        <p>&copy; 2025 PC Configurator. All rights reserved.</p>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
