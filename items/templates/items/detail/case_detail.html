@@ -4,25 +4,25 @@
 {% block content %}
     <link rel="stylesheet" href="{% static 'configuration/detail.css' %}">
 
-<div class="item-container">
-    <div class="item-image">
-        <img src="{{ case.case_image.url }}" alt="{{ case.case_name }}">
-    </div>
+    <div class="item-container">
+        <div class="item-image">
+            <img src="{{ case.case_image.url }}" alt="{{ case.case_name }}">
+        </div>
 
-    <div class="item-details">
-        <h1 class="title">{{ case.case_name }}</h1>
-        <p class="info">Manufacturer: {{ case.case_manufacturer }}</p>
-        <p class="info">Form Factor: {{ case.case_form_factor }}</p>
-        <p class="info">Size: {{ case.case_size }}</p>
-        <p class="info">Power Supply Form Factor: {{ case.case_power_supply_form_factor }}</p>
-        <p class="info">Number of Fans: {{ case.case_fan }}</p>
-        <p class="info">Price: {{ case.case_price }}₴</p>
-        <p class="info">Description: {{ case.case_description }}</p>
+        <div class="item-details">
+            <h1 class="title">{{ case.case_name }}</h1>
+            <p class="info">Manufacturer: {{ case.case_manufacturer }}</p>
+            <p class="info">Form Factor: {{ case.case_form_factor }}</p>
+            <p class="info">Size: {{ case.case_size }}</p>
+            <p class="info">Power Supply Form Factor: {{ case.case_power_supply_form_factor }}</p>
+            <p class="info">Number of Fans: {{ case.case_fan }}</p>
+            <p class="info">Price: {{ case.case_price }}₴</p>
+            <p class="info">Description: {{ case.case_description }}</p>
 
-        <div class="back-link">
-            <a href="{% url 'list_view_case' %}" class="button">Back to Cases</a>
+            <div class="back-link">
+                <a href="{% url 'list_view_case' %}" class="button">Back to Cases</a>
+            </div>
         </div>
     </div>
-</div>
 
 {% endblock %}

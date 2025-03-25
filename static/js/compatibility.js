@@ -7,7 +7,7 @@ let selectedPowerSupply = null;
 let selectedStorage = null;
 let selectedCase = null;
 
-let totalPrice = 0; // Track the total price
+let totalPrice = 0;
 
 function fetchComponents() {
     const url = '/get_compatible_components/';
@@ -19,7 +19,7 @@ function fetchComponents() {
         gpu_id: selectedGPU,
         power_supply_id: selectedPowerSupply,
         storage_id: selectedStorage,
-        case_id: selectedCase // Make sure this is included
+        case_id: selectedCase
     };
     $.ajax({
         url: url,
@@ -56,13 +56,11 @@ function updateComponentList(type, components) {
                                 $('#selected-case');
     listContainer.empty();
 
-    // If there are no compatible items, show a message
     if (components.length === 0) {
         listContainer.append('<p>No compatible items found.</p>');
         return;
     }
 
-    // Add compatible or selected items
     components.forEach((item) => {
         const isActive =
             (type === 'cpu' && item.id === selectedCPU) ||
@@ -88,7 +86,6 @@ function updateComponentList(type, components) {
         listContainer.append(html);
     });
 
-    // Update the selected component text
     const selectedItem =
         type === 'cpu' ? components.find(item => item.id === selectedCPU) :
             type === 'motherboard' ? components.find(item => item.id === selectedMotherboard) :
@@ -100,12 +97,12 @@ function updateComponentList(type, components) {
                                     components.find(item => item.id === selectedCase);
 
     selectedComponentText.html(selectedItem ? `${selectedItem.name} - ${selectedItem.price}₴` : 'None');
-    updateTotalPrice(); // Update total price after each selection
+    updateTotalPrice();
 }
 
 function selectComponent(element, type) {
     const id = $(element).data('id');
-    const price = parseInt($(element).data('price')); // Get the price from data-price
+    const price = parseInt($(element).data('price'));
 
     // Toggle selection
     if ($(element).hasClass('active')) {
@@ -128,7 +125,7 @@ function selectComponent(element, type) {
             selectedCase = null;
         }
 
-        totalPrice -= price; // Subtract price when deselecting
+        totalPrice -= price;
     } else {
         $(element).siblings().removeClass('active');
         $(element).addClass('active');
@@ -150,14 +147,14 @@ function selectComponent(element, type) {
             selectedCase = id;
         }
 
-        totalPrice += price; // Add price when selecting
+        totalPrice += price;
     }
 
-    fetchComponents(); // Fetch compatible items after selection
+    fetchComponents();
 }
 
 function updateTotalPrice() {
-    $('#total-price').text(`${totalPrice}₴`); // Update the displayed total price
+    $('#total-price').text(`${totalPrice}₴`);
 }
 
 $(document).on('click', '.component-item', function () {
@@ -185,7 +182,7 @@ function saveBuild() {
         url: '/save_computer_build/',
         type: 'POST',
         data: data,
-        headers: { "X-CSRFToken": getCSRFToken() },  // Ensure CSRF protection
+        headers: { "X-CSRFToken": getCSRFToken() },
         success: function(response) {
             if (response.status === 'success') {
                 alert('Build saved successfully!');
@@ -199,7 +196,6 @@ function saveBuild() {
     });
 }
 
-// Function to get CSRF Token
 function getCSRFToken() {
     return document.cookie.split('; ')
         .find(row => row.startsWith('csrftoken='))

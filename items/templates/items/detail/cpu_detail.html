@@ -4,26 +4,26 @@
 {% block content %}
     <link rel="stylesheet" href="{% static 'configuration/detail.css' %}">
 
-<div class="item-container">
-    <div class="item-image">
-        <img src="{{ cpu.cpu_image.url }}" alt="{{ cpu.cpu_name }}">
-    </div>
+    <div class="item-container">
+        <div class="item-image">
+            <img src="{{ cpu.cpu_image.url }}" alt="{{ cpu.cpu_name }}">
+        </div>
 
-    <div class="item-details">
-        <h1 class="title">{{ cpu.cpu_name }}</h1>
-        <p class="info">Manufacturer: {{ cpu.cpu_manufacturer }}</p>
-        <p class="info">Socket: {{ cpu.cpu_socket }}</p>
-        <p class="info">Cores: {{ cpu.cpu_cores }}</p>
-        <p class="info">Threads: {{ cpu.cpu_threads }}</p>
-        <p class="info">Clock Speed: {{ cpu.cpu_clock_speed }}</p>
-        <p class="info">TDP: {{ cpu.cpu_tdp }} W</p>
-        <p class="info">Price: {{ cpu.cpu_price }}₴</p>
-        <p class="info">Description: {{ cpu.cpu_description }}</p>
+        <div class="item-details">
+            <h1 class="title">{{ cpu.cpu_name }}</h1>
+            <p class="info">Manufacturer: {{ cpu.cpu_manufacturer }}</p>
+            <p class="info">Socket: {{ cpu.cpu_socket }}</p>
+            <p class="info">Cores: {{ cpu.cpu_cores }}</p>
+            <p class="info">Threads: {{ cpu.cpu_threads }}</p>
+            <p class="info">Clock Speed: {{ cpu.cpu_clock_speed }}</p>
+            <p class="info">TDP: {{ cpu.cpu_tdp }} W</p>
+            <p class="info">Price: {{ cpu.cpu_price }}₴</p>
+            <p class="info">Description: {{ cpu.cpu_description }}</p>
 
-        <div class="back-link">
-            <a href="{% url 'list_view_cpu' %}" class="button">Back to CPUs</a>
+            <div class="back-link">
+                <a href="{% url 'list_view_cpu' %}" class="button">Back to CPUs</a>
+            </div>
         </div>
     </div>
-</div>
 
 {% endblock %}

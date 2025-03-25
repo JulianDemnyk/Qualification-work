@@ -4,25 +4,25 @@
 {% block content %}
     <link rel="stylesheet" href="{% static 'configuration/detail.css' %}">
 
-<div class="item-container">
-    <div class="item-image">
-        <img src="{{ storage.storage_image.url }}" alt="{{ storage.storage_name }}">
-    </div>
+    <div class="item-container">
+        <div class="item-image">
+            <img src="{{ storage.storage_image.url }}" alt="{{ storage.storage_name }}">
+        </div>
 
-    <div class="item-details">
-        <h1 class="title">{{ storage.storage_name }}</h1>
-        <p class="info">Manufacturer: {{ storage.storage_manufacturer }}</p>
-        <p class="info">Type: {{ storage.storage_type }}</p>
-        <p class="info">Capacity: {{ storage.storage_capacity }} GB</p>
-        <p class="info">Speed: {{ storage.storage_speed }} MB/s</p>
-        <p class="info">Connection: {{ storage.storage_connection }}</p>
-        <p class="info">Price: {{ storage.storage_price }}₴</p>
-        <p class="info">Description: {{ storage.storage_description }}</p>
+        <div class="item-details">
+            <h1 class="title">{{ storage.storage_name }}</h1>
+            <p class="info">Manufacturer: {{ storage.storage_manufacturer }}</p>
+            <p class="info">Type: {{ storage.storage_type }}</p>
+            <p class="info">Capacity: {{ storage.storage_capacity }} GB</p>
+            <p class="info">Speed: {{ storage.storage_speed }} MB/s</p>
+            <p class="info">Connection: {{ storage.storage_connection }}</p>
+            <p class="info">Price: {{ storage.storage_price }}₴</p>
+            <p class="info">Description: {{ storage.storage_description }}</p>
 
-        <div class="back-link">
-            <a href="{% url 'list_view_storage' %}" class="button">Back to Storage</a>
+            <div class="back-link">
+                <a href="{% url 'list_view_storage' %}" class="button">Back to Storage</a>
+            </div>
         </div>
     </div>
-</div>
 
 {% endblock %}

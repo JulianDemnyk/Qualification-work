@@ -4,29 +4,29 @@
 {% block content %}
     <link rel="stylesheet" href="{% static 'configuration/detail.css' %}">
 
-<div class="item-container">
-    <div class="item-image">
-        <img src="{{ motherboard.motherboard_image.url }}" alt="{{ motherboard.motherboard_name }}">
-    </div>
+    <div class="item-container">
+        <div class="item-image">
+            <img src="{{ motherboard.motherboard_image.url }}" alt="{{ motherboard.motherboard_name }}">
+        </div>
 
-    <div class="item-details">
-        <h1 class="title">{{ motherboard.motherboard_name }}</h1>
-        <p class="info">Manufacturer: {{ motherboard.motherboard_manufacturer }}</p>
-        <p class="info">Socket: {{ motherboard.motherboard_socket }}</p>
-        <p class="info">Chipset: {{ motherboard.motherboard_chipset }}</p>
-        <p class="info">RAM Type: {{ motherboard.motherboard_ram_type }}</p>
-        <p class="info">RAM Slots: {{ motherboard.motherboard_ram_slot }}</p>
-        <p class="info">PCI Slots: {{ motherboard.motherboard_pci_slot }}</p>
-        <p class="info">SATA Slots: {{ motherboard.motherboard_sata_slot }}</p>
-        <p class="info">M.2 Slots: {{ motherboard.motherboard_m2_slot }}</p>
-        <p class="info">Form Factor: {{ motherboard.motherboard_form_factor }}</p>
-        <p class="info">Price: {{ motherboard.motherboard_price }}₴</p>
-        <p class="info">Description: {{ motherboard.motherboard_description }}</p>
+        <div class="item-details">
+            <h1 class="title">{{ motherboard.motherboard_name }}</h1>
+            <p class="info">Manufacturer: {{ motherboard.motherboard_manufacturer }}</p>
+            <p class="info">Socket: {{ motherboard.motherboard_socket }}</p>
+            <p class="info">Chipset: {{ motherboard.motherboard_chipset }}</p>
+            <p class="info">RAM Type: {{ motherboard.motherboard_ram_type }}</p>
+            <p class="info">RAM Slots: {{ motherboard.motherboard_ram_slot }}</p>
+            <p class="info">PCI Slots: {{ motherboard.motherboard_pci_slot }}</p>
+            <p class="info">SATA Slots: {{ motherboard.motherboard_sata_slot }}</p>
+            <p class="info">M.2 Slots: {{ motherboard.motherboard_m2_slot }}</p>
+            <p class="info">Form Factor: {{ motherboard.motherboard_form_factor }}</p>
+            <p class="info">Price: {{ motherboard.motherboard_price }}₴</p>
+            <p class="info">Description: {{ motherboard.motherboard_description }}</p>
 
-        <div class="back-link">
-            <a href="{% url 'list_view_motherboard' %}" class="button">Back to Motherboards</a>
+            <div class="back-link">
+                <a href="{% url 'list_view_motherboard' %}" class="button">Back to Motherboards</a>
+            </div>
         </div>
     </div>
-</div>
 
 {% endblock %}

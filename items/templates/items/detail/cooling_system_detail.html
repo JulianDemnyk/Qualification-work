@@ -4,23 +4,23 @@
 {% block content %}
     <link rel="stylesheet" href="{% static 'configuration/detail.css' %}">
 
-<div class="item-container">
-    <div class="item-image">
-        <img src="{{ cooling_system.cooling_system_image.url }}" alt="{{ cooling_system.cooling_system_name }}">
-    </div>
+    <div class="item-container">
+        <div class="item-image">
+            <img src="{{ cooling_system.cooling_system_image.url }}" alt="{{ cooling_system.cooling_system_name }}">
+        </div>
 
-    <div class="item-details">
-        <h1 class="title">{{ cooling_system.cooling_system_name }}</h1>
-        <p class="info">Manufacturer: {{ cooling_system.cooling_system_manufacturer }}</p>
-        <p class="info">Socket: {{ cooling_system.cooling_system_socket }}</p>
-        <p class="info">TDP: {{ cooling_system.cooling_system_tdp }} W</p>
-        <p class="info">Price: {{ cooling_system.cooling_system_price }}₴</p>
-        <p class="info">Description: {{ cooling_system.cooling_system_description }}</p>
+        <div class="item-details">
+            <h1 class="title">{{ cooling_system.cooling_system_name }}</h1>
+            <p class="info">Manufacturer: {{ cooling_system.cooling_system_manufacturer }}</p>
+            <p class="info">Socket: {{ cooling_system.cooling_system_socket }}</p>
+            <p class="info">TDP: {{ cooling_system.cooling_system_tdp }} W</p>
+            <p class="info">Price: {{ cooling_system.cooling_system_price }}₴</p>
+            <p class="info">Description: {{ cooling_system.cooling_system_description }}</p>
 
-        <div class="back-link">
-            <a href="{% url 'list_view_cooling_system' %}" class="button">Back to Cooling Systems</a>
+            <div class="back-link">
+                <a href="{% url 'list_view_cooling_system' %}" class="button">Back to Cooling Systems</a>
+            </div>
         </div>
     </div>
-</div>
 
 {% endblock %}

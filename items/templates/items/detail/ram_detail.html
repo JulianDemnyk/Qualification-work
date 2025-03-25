@@ -4,25 +4,25 @@
 {% block content %}
     <link rel="stylesheet" href="{% static 'configuration/detail.css' %}">
 
-<div class="item-container">
-    <div class="item-image">
-        <img src="{{ ram.ram_image.url }}" alt="{{ ram.ram_name }}">
-    </div>
+    <div class="item-container">
+        <div class="item-image">
+            <img src="{{ ram.ram_image.url }}" alt="{{ ram.ram_name }}">
+        </div>
 
-    <div class="item-details">
-        <h1 class="title">{{ ram.ram_name }}</h1>
-        <p class="info">Manufacturer: {{ ram.ram_manufacturer }}</p>
-        <p class="info">Type: {{ ram.ram_type }}</p>
-        <p class="info">Clock Speed: {{ ram.ram_clock_speed }}</p>
-        <p class="info">Size: {{ ram.ram_size }}</p>
-        <p class="info">Amount: {{ ram.ram_amount }} GB</p>
-        <p class="info">Price: {{ ram.ram_price }}₴</p>
-        <p class="info">Description: {{ ram.ram_description }}</p>
+        <div class="item-details">
+            <h1 class="title">{{ ram.ram_name }}</h1>
+            <p class="info">Manufacturer: {{ ram.ram_manufacturer }}</p>
+            <p class="info">Type: {{ ram.ram_type }}</p>
+            <p class="info">Clock Speed: {{ ram.ram_clock_speed }}</p>
+            <p class="info">Size: {{ ram.ram_size }}</p>
+            <p class="info">Amount: {{ ram.ram_amount }} GB</p>
+            <p class="info">Price: {{ ram.ram_price }}₴</p>
+            <p class="info">Description: {{ ram.ram_description }}</p>
 
-        <div class="back-link">
-            <a href="{% url 'list_view_ram' %}" class="button">Back to RAMs</a>
+            <div class="back-link">
+                <a href="{% url 'list_view_ram' %}" class="button">Back to RAMs</a>
+            </div>
         </div>
     </div>
-</div>
 
 {% endblock %}
