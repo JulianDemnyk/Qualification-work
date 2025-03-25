@@ -2,35 +2,30 @@
 {% load static %}
 
 {% block content %}
+    <link rel="stylesheet" href="{% static 'configuration/list.css' %}">
 
-    <div class="gpu-list">
-
-        <div>
-
-            <form action="{% url 'list_view_gpu' %}">
-                <input type="text" name="q" placeholder="Search for gpu"/>
+    <div class="item-container">
+        <div class="item-details">
+            <form action="{% url 'list_view_gpu' %}" class="search-form">
+                <input type="text" name="q" placeholder="Search for graphic card" class="search-input"/>
             </form>
 
-            <h3><a href="{% url 'list_view_gpu' %}">All Gpus</a></h3>
+            <h3><a href="{% url 'list_view_gpu' %}" class="link-title">All Graphic cards</a></h3>
 
-        </div>
+            <h4>{{ gpu_count }} Graphic cards found</h4>
 
-        <div>
-
-            <h4>{{ gpu_count }} Gpus found</h4>
-
-            <div class="gpu-container">
+            <div class="items-container">
                 {% for gpu in gpu_list %}
-                        <div class="item">
+                    <div class="item">
+                        <a href="{% url 'detail_view_gpu' gpu.id %}">
                             <img class="image" src="{{ gpu.gpu_image.url }}" alt="{{ gpu.gpu_name }}"/>
-                            <p><a href="{% url 'detail_view_gpu' gpu.id %}">{{ gpu.gpu_name }}</a></p>
-                            <p>Price: {{ gpu.gpu_price }}₴</p>
-                        </div>
+                        </a>
+                        <p><a href="{% url 'detail_view_gpu' gpu.id %}" class="link-title">{{ gpu.gpu_name }}</a></p>
+                        <p>Price: {{ gpu.gpu_price }}₴</p>
+                    </div>
                 {% endfor %}
             </div>
-
         </div>
-
     </div>
 
 {% endblock %}

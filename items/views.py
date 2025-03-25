@@ -271,9 +271,9 @@ def list_view_cpu(request):
     q=request.GET.get('q') if request.GET.get('q') is not None else ''
 
     cpu = Cpu_model.objects.filter(
-        Q(cpu_name__contains=q)|
-        Q(cpu_manufacturer__contains=q)|
-        Q(cpu_socket__contains=q)|
+        Q(cpu_name__contains=q) |
+        Q(cpu_manufacturer__contains=q) |
+        Q(cpu_socket__contains=q) |
         Q(cpu_description__contains=q)
     )
 
@@ -298,9 +298,9 @@ def list_view_motherboard(request):
     q=request.GET.get('q') if request.GET.get('q') is not None else ''
 
     motherboard = Motherboard_model.objects.filter(
-        Q(motherboard_name__contains=q)|
-        Q(motherboard_manufacturer__contains=q)|
-        Q(motherboard_socket__contains=q)|
+        Q(motherboard_name__contains=q) |
+        Q(motherboard_manufacturer__contains=q) |
+        Q(motherboard_socket__contains=q) |
         Q(motherboard_chipset__contains=q) |
         Q(motherboard_form_factor__contains=q) |
         Q(motherboard_ram_type__contains=q) |
@@ -328,9 +328,9 @@ def list_view_gpu(request):
     q=request.GET.get('q') if request.GET.get('q') is not None else ''
 
     gpu = Gpu_model.objects.filter(
-        Q(gpu_name__contains=q)|
-        Q(gpu_manufacturer__contains=q)|
-        Q(gpu_ram_type__contains=q)|
+        Q(gpu_name__contains=q) |
+        Q(gpu_manufacturer__contains=q) |
+        Q(gpu_ram_type__contains=q) |
         Q(gpu_description__contains=q)
     )
 
@@ -355,10 +355,10 @@ def list_view_ram(request):
     q=request.GET.get('q') if request.GET.get('q') is not None else ''
 
     ram = Ram_model.objects.filter(
-        Q(ram_name__contains=q)|
-        Q(ram_manufacturer__contains=q)|
-        Q(ram_type__contains=q)|
-        Q(ram_size__contains=q)|
+        Q(ram_name__contains=q) |
+        Q(ram_manufacturer__contains=q) |
+        Q(ram_type__contains=q) |
+        Q(ram_size__contains=q) |
         Q(ram_amount__contains=q) |
         Q(ram_description__contains=q)
     )
@@ -384,10 +384,10 @@ def list_view_storage(request):
     q=request.GET.get('q') if request.GET.get('q') is not None else ''
 
     storage = Storage_model.objects.filter(
-        Q(storage_name__contains=q)|
-        Q(storage_manufacturer__contains=q)|
-        Q(storage_type__contains=q)|
-        Q(storage_capacity__contains=q)|
+        Q(storage_name__contains=q) |
+        Q(storage_manufacturer__contains=q) |
+        Q(storage_type__contains=q) |
+        Q(storage_capacity__contains=q) |
         Q(storage_connection__contains=q) |
         Q(storage_description__contains=q)
     )
@@ -413,10 +413,10 @@ def list_view_cooling_system(request):
     q=request.GET.get('q') if request.GET.get('q') is not None else ''
 
     cooling_system = Cooling_system_model.objects.filter(
-        Q(cooling_system_name__contains=q)|
-        Q(cooling_system_manufacturer__contains=q)|
-        Q(cooling_system_socket__contains=q)|
-        Q(cooling_system_tdp__contains=q)|
+        Q(cooling_system_name__contains=q) |
+        Q(cooling_system_manufacturer__contains=q) |
+        Q(cooling_system_socket__contains=q) |
+        Q(cooling_system_tdp__contains=q) |
         Q(cooling_system_description__contains=q)
     )
 
@@ -441,10 +441,10 @@ def list_view_power_supply(request):
     q=request.GET.get('q') if request.GET.get('q') is not None else ''
 
     power_supply = Power_supply_model.objects.filter(
-        Q(power_supply_name__contains=q)|
-        Q(power_supply_manufacturer__contains=q)|
-        Q(power_supply_power__contains=q)|
-        Q(power_supply_form_factor__contains=q)|
+        Q(power_supply_name__contains=q) |
+        Q(power_supply_manufacturer__contains=q) |
+        Q(power_supply_power__contains=q) |
+        Q(power_supply_form_factor__contains=q) |
         Q(power_supply_description__contains=q)
     )
 
@@ -487,9 +487,54 @@ def list_view_case(request):
 
 @login_required(login_url='login/')
 def user_profile(request):
-    builds = Computer_build.objects.filter(owner=request.user)
+    q=request.GET.get('q') if request.GET.get('q') is not None else ''
+
+    builds = Computer_build.objects.filter(
+        Q(owner=request.user) |
+        Q(cpu__cpu_name__contains=q) |
+        Q(cpu__cpu_manufacturer__contains=q) |
+        Q(cpu__cpu_socket__contains=q) |
+        Q(cpu__cpu_description__contains=q) |
+        Q(motherboard__motherboard_name__icontains=q) |
+        Q(motherboard__motherboard_manufacturer__contains=q) |
+        Q(motherboard__motherboard_socket__contains=q) |
+        Q(motherboard__motherboard_chipset__contains=q) |
+        Q(motherboard__motherboard_form_factor__contains=q) |
+        Q(motherboard__motherboard_ram_type__contains=q) |
+        Q(motherboard__motherboard_description__contains=q) |
+        Q(gpu__gpu_name__contains=q) |
+        Q(gpu__gpu_manufacturer__contains=q) |
+        Q(gpu__gpu_ram_type__contains=q) |
+        Q(gpu__gpu_description__contains=q) |
+        Q(ram__ram_name__contains=q) |
+        Q(ram__ram_manufacturer__contains=q) |
+        Q(ram__ram_type__contains=q) |
+        Q(ram__ram_size__contains=q) |
+        Q(ram__ram_amount__contains=q) |
+        Q(ram__ram_description__contains=q) |
+        Q(storage__storage_name__contains=q) |
+        Q(storage__storage_manufacturer__contains=q) |
+        Q(storage__storage_type__contains=q) |
+        Q(storage__storage_capacity__contains=q) |
+        Q(storage__storage_connection__contains=q) |
+        Q(storage__storage_description__contains=q) |
+        Q(cooling_system__cooling_system_name__contains=q) |
+        Q(cooling_system__cooling_system_manufacturer__contains=q) |
+        Q(cooling_system__cooling_system_socket__contains=q) |
+        Q(cooling_system__cooling_system_tdp__contains=q) |
+        Q(cooling_system__cooling_system_description__contains=q) |
+        Q(power_supply__power_supply_name__contains=q) |
+        Q(power_supply__power_supply_manufacturer__contains=q) |
+        Q(power_supply__power_supply_power__contains=q) |
+        Q(power_supply__power_supply_form_factor__contains=q) |
+        Q(power_supply__power_supply_description__contains=q)
+    )
+
+    builds_count = builds.count()
+
     context = {
         'builds': builds,
+        'builds_count': builds_count,
     }
     return render(request, "pages/profile.html", context)
 

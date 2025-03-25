@@ -2,35 +2,30 @@
 {% load static %}
 
 {% block content %}
+    <link rel="stylesheet" href="{% static 'configuration/list.css' %}">
 
-    <div class="cpu-list">
-
-        <div>
-
-            <form action="{% url 'list_view_cpu' %}">
-                <input type="text" name="q" placeholder="Search for cpu"/>
+    <div class="item-container">
+        <div class="item-details">
+            <form action="{% url 'list_view_cpu' %}" class="search-form">
+                <input type="text" name="q" placeholder="Search for processor" class="search-input"/>
             </form>
 
-            <h3><a href="{% url 'list_view_cpu' %}">All Cpus</a></h3>
+            <h3><a href="{% url 'list_view_cpu' %}" class="link-title">All Processors</a></h3>
 
-        </div>
+            <h4>{{ cpu_count }} Processors found</h4>
 
-        <div>
-
-            <h4>{{ cpu_count }} Cpus found</h4>
-
-            <div class="cpus-container">
+            <div class="items-container">
                 {% for cpu in cpu_list %}
-                        <div class="item">
+                    <div class="item">
+                        <a href="{% url 'detail_view_cpu' cpu.id %}">
                             <img class="image" src="{{ cpu.cpu_image.url }}" alt="{{ cpu.cpu_name }}"/>
-                            <p><a href="{% url 'detail_view_cpu' cpu.id %}">{{ cpu.cpu_name }}</a></p>
-                            <p>Price: {{ cpu.cpu_price }}₴</p>
-                        </div>
+                        </a>
+                        <p><a href="{% url 'detail_view_cpu' cpu.id %}" class="link-title">{{ cpu.cpu_name }}</a></p>
+                        <p>Price: {{ cpu.cpu_price }}₴</p>
+                    </div>
                 {% endfor %}
             </div>
-
         </div>
-
     </div>
 
 {% endblock %}

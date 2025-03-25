@@ -7,8 +7,10 @@ let selectedPowerSupply = null;
 let selectedStorage = null;
 let selectedCase = null;
 
+let totalPrice = 0; // Track the total price
+
 function fetchComponents() {
-    const url = '/get_compatible_components/'
+    const url = '/get_compatible_components/';
     const data = {
         cpu_id: selectedCPU,
         motherboard_id: selectedMotherboard,
@@ -22,17 +24,17 @@ function fetchComponents() {
     $.ajax({
         url: url,
         data: data,
-            success: function (response) {
-                updateComponentList('cpu', response.cpus);
-                updateComponentList('motherboard', response.motherboards); // Ensure this is updated
-                updateComponentList('ram', response.rams);
-                updateComponentList('cooling_system', response.cooling_systems);
-                updateComponentList('gpu', response.gpus);
-                updateComponentList('power_supply', response.power_supplys);
-                updateComponentList('storage', response.storages);
-                updateComponentList('case', response.cases);
-            },
-        });
+        success: function (response) {
+            updateComponentList('cpu', response.cpus);
+            updateComponentList('motherboard', response.motherboards); // Ensure this is updated
+            updateComponentList('ram', response.rams);
+            updateComponentList('cooling_system', response.cooling_systems);
+            updateComponentList('gpu', response.gpus);
+            updateComponentList('power_supply', response.power_supplys);
+            updateComponentList('storage', response.storages);
+            updateComponentList('case', response.cases);
+        },
+    });
 }
 
 function updateComponentList(type, components) {
@@ -54,13 +56,13 @@ function updateComponentList(type, components) {
                                 $('#selected-case');
     listContainer.empty();
 
-            // If there are no compatible items, show a message
+    // If there are no compatible items, show a message
     if (components.length === 0) {
         listContainer.append('<p>No compatible items found.</p>');
         return;
     }
 
-            // Add compatible or selected items
+    // Add compatible or selected items
     components.forEach((item) => {
         const isActive =
             (type === 'cpu' && item.id === selectedCPU) ||
@@ -73,19 +75,20 @@ function updateComponentList(type, components) {
             (type === 'case' && item.id === selectedCase);
 
         const html = `
-            <div class="component-item ${isActive ? 'active' : ''}" data-id="${item.id}" data-type="${type}">
+            <div class="component-item ${isActive ? 'active' : ''}" data-id="${item.id}" data-type="${type}" data-price="${item.price}">
                 <img src="${item.image_url}" alt="${item.name}">
                 <h3>${item.name}</h3>
                 <p>Price: ${item.price}₴</p>
-            </div>
-            <div class ="component-item-view">
-                <a href="/${type}s/${item.id}/">View ${item.name}</a>
+                
+                <div class="component-item-view">
+                    <a href="/${type}s/${item.id}/">More details</a>
+                </div>
             </div>
         `;
         listContainer.append(html);
     });
 
-            // Update the selected component text
+    // Update the selected component text
     const selectedItem =
         type === 'cpu' ? components.find(item => item.id === selectedCPU) :
             type === 'motherboard' ? components.find(item => item.id === selectedMotherboard) :
@@ -95,12 +98,14 @@ function updateComponentList(type, components) {
                             type === 'power_supply' ? components.find(item => item.id === selectedPowerSupply) :
                                 type === 'storage' ? components.find(item => item.id === selectedStorage) :
                                     components.find(item => item.id === selectedCase);
-    selectedComponentText.text(selectedItem ? selectedItem.name : 'None');
+
+    selectedComponentText.html(selectedItem ? `${selectedItem.name} - ${selectedItem.price}₴` : 'None');
+    updateTotalPrice(); // Update total price after each selection
 }
 
 function selectComponent(element, type) {
     const id = $(element).data('id');
-    let name = $(element).data('name');  // Assuming the component name is stored in a data attribute
+    const price = parseInt($(element).data('price')); // Get the price from data-price
 
     // Toggle selection
     if ($(element).hasClass('active')) {
@@ -121,8 +126,9 @@ function selectComponent(element, type) {
             selectedStorage = null;
         } else {
             selectedCase = null;
-            $('#selected-case-text').text("Selected Case: None"); // Update text when unselecting
-            }
+        }
+
+        totalPrice -= price; // Subtract price when deselecting
     } else {
         $(element).siblings().removeClass('active');
         $(element).addClass('active');
@@ -142,11 +148,16 @@ function selectComponent(element, type) {
             selectedStorage = id;
         } else {
             selectedCase = id;
-            $('#selected-case-text').text("Selected Case: " + name); // Update text with selected case name
         }
+
+        totalPrice += price; // Add price when selecting
     }
 
     fetchComponents(); // Fetch compatible items after selection
+}
+
+function updateTotalPrice() {
+    $('#total-price').text(`${totalPrice}₴`); // Update the displayed total price
 }
 
 $(document).on('click', '.component-item', function () {

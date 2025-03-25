@@ -2,35 +2,30 @@
 {% load static %}
 
 {% block content %}
+    <link rel="stylesheet" href="{% static 'configuration/list.css' %}">
 
-    <div class="storage-list">
-
-        <div>
-
-            <form action="{% url 'list_view_storage' %}">
-                <input type="text" name="q" placeholder="Search for storage"/>
+    <div class="item-container">
+        <div class="item-details">
+            <form action="{% url 'list_view_storage' %}" class="search-form">
+                <input type="text" name="q" placeholder="Search for storage" class="search-input"/>
             </form>
 
-            <h3><a href="{% url 'list_view_storage' %}">All Storages</a></h3>
-
-        </div>
-
-        <div>
+            <h3><a href="{% url 'list_view_storage' %}" class="link-title">All Storages</a></h3>
 
             <h4>{{ storage_count }} Storages found</h4>
 
-            <div class="storage-container">
+            <div class="items-container">
                 {% for storage in storage_list %}
-                        <div class="item">
+                    <div class="item">
+                        <a href="{% url 'detail_view_storage' storage.id %}">
                             <img class="image" src="{{ storage.storage_image.url }}" alt="{{ storage.storage_name }}"/>
-                            <p><a href="{% url 'detail_view_storage' storage.id %}">{{ storage.storage_name }}</a></p>
-                            <p>Price: {{ storage.storage_price }}₴</p>
-                        </div>
+                        </a>
+                        <p><a href="{% url 'detail_view_storage' storage.id %}" class="link-title">{{ storage.storage_name }}</a></p>
+                        <p>Price: {{ storage.storage_price }}₴</p>
+                    </div>
                 {% endfor %}
             </div>
-
         </div>
-
     </div>
 
 {% endblock %}

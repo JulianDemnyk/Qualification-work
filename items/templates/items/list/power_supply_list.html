@@ -2,35 +2,30 @@
 {% load static %}
 
 {% block content %}
+    <link rel="stylesheet" href="{% static 'configuration/list.css' %}">
 
-    <div class="power-supply-list">
-
-        <div>
-
-            <form action="{% url 'list_view_power_supply' %}">
-                <input type="text" name="q" placeholder="Search for power supply"/>
+    <div class="item-container">
+        <div class="item-details">
+            <form action="{% url 'list_view_power_supply' %}" class="search-form">
+                <input type="text" name="q" placeholder="Search for power supply" class="search-input"/>
             </form>
 
-            <h3><a href="{% url 'list_view_power_supply' %}">All Power supplys</a></h3>
+            <h3><a href="{% url 'list_view_power_supply' %}" class="link-title">All Power supplies</a></h3>
 
-        </div>
+            <h4>{{ power_supply_count }} Power Supplies found</h4>
 
-        <div>
-
-            <h4>{{ power_supply_count }} Power supplys found</h4>
-
-            <div class="power-supply-container">
+            <div class="items-container">
                 {% for power_supply in power_supply_list %}
-                        <div class="item">
+                    <div class="item">
+                        <a href="{% url 'detail_view_power_supply' power_supply.id %}">
                             <img class="image" src="{{ power_supply.power_supply_image.url }}" alt="{{ power_supply.power_supply_name }}"/>
-                            <p><a href="{% url 'detail_view_power_supply' power_supply.id %}">{{ power_supply.power_supply_name }}</a></p>
-                            <p>Price: {{ power_supply.power_supply_price }}₴</p>
-                        </div>
+                        </a>
+                        <p><a href="{% url 'detail_view_power_supply' power_supply.id %}" class="link-title">{{ power_supply.power_supply_name }}</a></p>
+                        <p>Price: {{ power_supply.power_supply_price }}₴</p>
+                    </div>
                 {% endfor %}
             </div>
-
         </div>
-
     </div>
 
 {% endblock %}

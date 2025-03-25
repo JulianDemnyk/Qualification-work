@@ -2,35 +2,30 @@
 {% load static %}
 
 {% block content %}
+    <link rel="stylesheet" href="{% static 'configuration/list.css' %}">
 
-    <div class="ram-list">
-
-        <div>
-
-            <form action="{% url 'list_view_ram' %}">
-                <input type="text" name="q" placeholder="Search for ram"/>
+    <div class="item-container">
+        <div class="item-details">
+            <form action="{% url 'list_view_ram' %}" class="search-form">
+                <input type="text" name="q" placeholder="Search for memory" class="search-input"/>
             </form>
 
-            <h3><a href="{% url 'list_view_ram' %}">All Rams</a></h3>
+            <h3><a href="{% url 'list_view_ram' %}" class="link-title">All Memory</a></h3>
 
-        </div>
+            <h4>{{ ram_count }} Memory modules found</h4>
 
-        <div>
-
-            <h4>{{ ram_count }} Rams found</h4>
-
-            <div class="ram-container">
+            <div class="items-container">
                 {% for ram in ram_list %}
-                        <div class="item">
+                    <div class="item">
+                        <a href="{% url 'detail_view_ram' ram.id %}">
                             <img class="image" src="{{ ram.ram_image.url }}" alt="{{ ram.ram_name }}"/>
-                            <p><a href="{% url 'detail_view_ram' ram.id %}">{{ ram.ram_name }}</a></p>
-                            <p>Price: {{ ram.ram_price }}₴</p>
-                        </div>
+                        </a>
+                        <p><a href="{% url 'detail_view_ram' ram.id %}" class="link-title">{{ ram.ram_name }}</a></p>
+                        <p>Price: {{ ram.ram_price }}₴</p>
+                    </div>
                 {% endfor %}
             </div>
-
         </div>
-
     </div>
 
 {% endblock %}

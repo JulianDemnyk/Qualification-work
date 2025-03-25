@@ -1,94 +1,117 @@
 {% extends "pages/base.html" %}
+{% load static %}
 
 {% block content %}
 
-    <div class="build-detail">
-        <p>Total Price: {{ build.price }}₴</p>
+<link rel="stylesheet" href="{% static 'configuration/detail_build.css' %}">
 
-        <div>
-            <p>
+<div class="build-detail">
+
+    <h1 class="title">Build Details</h1>
+    <p class="info total-price">Total Price: {{ build.price }}₴</p>
+
+    <div class="components-container">
+        <div class="component-item">
+            <div class="item-image">
                 <a href="{% url 'detail_view_cpu' build.cpu.id %}">
                     <img src="{{ build.cpu.cpu_image.url }}" alt="{{ build.cpu.cpu_name }}">
                 </a>
-                CPU:
-                <a href="{% url 'detail_view_cpu' build.cpu.id %}">
-                    {{ build.cpu.cpu_name }}
-                </a>
-                Price: {{ build.cpu.cpu_price }}
-            </p>
-            <p>
+            </div>
+            <div class="item-details">
+                <p class="info">CPU: <a href="{% url 'detail_view_cpu' build.cpu.id %}">{{ build.cpu.cpu_name }}</a></p>
+                <p class="info">Price: {{ build.cpu.cpu_price }}₴</p>
+            </div>
+        </div>
+
+        <div class="component-item">
+            <div class="item-image">
                 <a href="{% url 'detail_view_motherboard' build.motherboard.id %}">
                     <img src="{{ build.motherboard.motherboard_image.url }}" alt="{{ build.motherboard.motherboard_name }}">
                 </a>
-                Motherboard:
-                <a href="{% url 'detail_view_motherboard' build.motherboard.id %}">
-                    {{ build.motherboard.motherboard_name }}
-                </a>
-                Price: {{ build.motherboard.motherboard_price }}
-            </p>
-            <p>
+            </div>
+            <div class="item-details">
+                <p class="info">Motherboard: <a href="{% url 'detail_view_motherboard' build.motherboard.id %}">{{ build.motherboard.motherboard_name }}</a></p>
+                <p class="info">Price: {{ build.motherboard.motherboard_price }}₴</p>
+            </div>
+        </div>
+
+        <div class="component-item">
+            <div class="item-image">
                 <a href="{% url 'detail_view_gpu' build.gpu.id %}">
                     <img src="{{ build.gpu.gpu_image.url }}" alt="{{ build.gpu.gpu_name }}">
                 </a>
-                GPU:
-                <a href="{% url 'detail_view_gpu' build.gpu.id %}">
-                    {{ build.gpu.gpu_name }}
-                </a>
-                Price: {{ build.gpu.gpu_price }}
-            </p>
-            <p>
+            </div>
+            <div class="item-details">
+                <p class="info">GPU: <a href="{% url 'detail_view_gpu' build.gpu.id %}">{{ build.gpu.gpu_name }}</a></p>
+                <p class="info">Price: {{ build.gpu.gpu_price }}₴</p>
+            </div>
+        </div>
+
+        <div class="component-item">
+            <div class="item-image">
                 <a href="{% url 'detail_view_ram' build.ram.id %}">
                     <img src="{{ build.ram.ram_image.url }}" alt="{{ build.ram.ram_name }}">
                 </a>
-                RAM:
-                <a href="{% url 'detail_view_ram' build.ram.id %}">
-                    {{ build.ram.ram_name }}
-                </a>
-                Price: {{ build.ram.ram_price }}
-            </p>
-            <p>
+            </div>
+            <div class="item-details">
+                <p class="info">RAM: <a href="{% url 'detail_view_ram' build.ram.id %}">{{ build.ram.ram_name }}</a></p>
+                <p class="info">Price: {{ build.ram.ram_price }}₴</p>
+            </div>
+        </div>
+
+        <div class="component-item">
+            <div class="item-image">
                 <a href="{% url 'detail_view_cooling_system' build.cooling_system.id %}">
                     <img src="{{ build.cooling_system.cooling_system_image.url }}" alt="{{ build.cooling_system.cooling_system_name }}">
                 </a>
-                Cooling System:
-                <a href="{% url 'detail_view_cooling_system' build.cooling_system.id %}">
-                    {{ build.cooling_system.cooling_system_name }}
-                </a>
-                Price: {{ build.cooling_system.cooling_system_price }}
-            </p>
-            <p>
+            </div>
+            <div class="item-details">
+                <p class="info">Cooling System: <a href="{% url 'detail_view_cooling_system' build.cooling_system.id %}">{{ build.cooling_system.cooling_system_name }}</a></p>
+                <p class="info">Price: {{ build.cooling_system.cooling_system_price }}₴</p>
+            </div>
+        </div>
+
+        <div class="component-item">
+            <div class="item-image">
                 <a href="{% url 'detail_view_power_supply' build.power_supply.id %}">
                     <img src="{{ build.power_supply.power_supply_image.url }}" alt="{{ build.power_supply.power_supply_name }}">
                 </a>
-                Power Supply:
-                <a href="{% url 'detail_view_power_supply' build.power_supply.id %}">
-                    {{ build.power.power_supply_name }}
-                </a>
-                Price: {{ build.power_supply.power_supply_price }}
-            </p>
-            <p>
+            </div>
+            <div class="item-details">
+                <p class="info">Power Supply: <a href="{% url 'detail_view_power_supply' build.power_supply.id %}">{{ build.power_supply.power_supply_name }}</a></p>
+                <p class="info">Price: {{ build.power_supply.power_supply_price }}₴</p>
+            </div>
+        </div>
+
+        <div class="component-item">
+            <div class="item-image">
                 <a href="{% url 'detail_view_storage' build.storage.id %}">
                     <img src="{{ build.storage.storage_image.url }}" alt="{{ build.storage.storage_name }}">
                 </a>
-                Storage:
-                <a href="{% url 'detail_view_storage' build.storage.id %}">
-                    {{ build.storage.storage_name }}
-                </a>
-                Price: {{ build.storage.storage_price }}
-            </p>
-            <p>
+            </div>
+            <div class="item-details">
+                <p class="info">Storage: <a href="{% url 'detail_view_storage' build.storage.id %}">{{ build.storage.storage_name }}</a></p>
+                <p class="info">Price: {{ build.storage.storage_price }}₴</p>
+            </div>
+        </div>
+
+        <div class="component-item">
+            <div class="item-image">
                 <a href="{% url 'detail_view_case' build.case.id %}">
                     <img src="{{ build.case.case_image.url }}" alt="{{ build.case.case_name }}">
                 </a>
-                Case:
-                <a href="{% url 'detail_view_case' build.case.id %}">
-                    {{ build.case.case_name }}
-                </a>
-                Price: {{ build.case.case_price }}
-            </p>
+            </div>
+            <div class="item-details">
+                <p class="info">Case: <a href="{% url 'detail_view_case' build.case.id %}">{{ build.case.case_name }}</a></p>
+                <p class="info">Price: {{ build.case.case_price }}₴</p>
+            </div>
         </div>
-
-        <a href="{% url 'profile' %}">Back to Profile</a>
     </div>
+
+    <div class="back-link">
+        <a href="{% url 'profile' %}" class="button">Back to Profile</a>
+    </div>
+
+</div>
 
 {% endblock %}

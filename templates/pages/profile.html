@@ -1,20 +1,37 @@
-{% extends "pages/base.html" %}
+{% extends 'pages/base.html' %}
+{% load static %}
 
 {% block content %}
-<div class="profile container">
-    <h1>{{ request.user.username }} Profile</h1>
-    <h2>Your Computer Builds</h2>
+    <link rel="stylesheet" href="{% static 'configuration/list.css' %}">
 
-    {% if builds %}
-            {% for build in builds %}
-                <a href="{% url 'detail_view_build' build.id %}"><img src="{{ build.case.case_image.url }}" alt="{{ build.case.case_name }}"></a>
-                <p>Build №{{ forloop.counter }}</p>
-                <p>Total Price: ${{ build.price }}</p>
-                <a href="{% url 'detail_view_build' build.id %}">View Full Build</a>
-                <hr>
-            {% endfor %}
-    {% else %}
-        <p>You have no saved builds yet.</p>
-    {% endif %}
-</div>
+    <div class="item-container">
+        <div class="item-details">
+            <h1 class="profile-name">{{ request.user.username }}'s Profile</h1>
+
+            <form action="{% url 'profile' %}" class="search-form">
+                <input type="text" name="q" placeholder="Search for computer build" class="search-input"/>
+            </form>
+
+            <h3><a href="{% url 'profile' %}" class="link-title">All Builds</a></h3>
+
+            <h4>{{ builds_count }} Builds found</h4>
+
+            <div class="items-container">
+                {% if builds %}
+                    {% for build in builds %}
+                        <div class="item">
+                            <a href="{% url 'detail_view_build' build.id %}">
+                                <img class="image" src="{{ build.case.case_image.url }}" alt="{{ build.case.case_name }}">
+                            </a>
+                            <p><a href="{% url 'detail_view_build' build.id %}" class="link-title">{{ build.case.case_name }}</a></p>
+                            <p>Total Price: ${{ build.price }}</p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>You have no saved builds yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
 {% endblock %}

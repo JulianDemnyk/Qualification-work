@@ -2,35 +2,30 @@
 {% load static %}
 
 {% block content %}
+    <link rel="stylesheet" href="{% static 'configuration/list.css' %}">
 
-    <div class="case-list">
-
-        <div>
-
-            <form action="{% url 'list_view_case' %}">
-                <input type="text" name="q" placeholder="Search for case"/>
+    <div class="item-container">
+        <div class="item-details">
+            <form action="{% url 'list_view_case' %}" class="search-form">
+                <input type="text" name="q" placeholder="Search for case" class="search-input"/>
             </form>
 
-            <h3><a href="{% url 'list_view_case' %}">All Cases</a></h3>
-
-        </div>
-
-        <div>
+            <h3><a href="{% url 'list_view_case' %}" class="link-title">All Cases</a></h3>
 
             <h4>{{ case_count }} Cases found</h4>
 
-            <div class="cases-container">
+            <div class="items-container">
                 {% for case in case_list %}
-                        <div class="item">
-                            <img class="image" src="{{ case.case_image.url }}" alt="{{ case.case_name }}"/>
-                            <p><a href="{% url 'detail_view_case' case.id %}">{{ case.case_name }}</a></p>
-                            <p>Price: {{ case.case_price }}₴</p>
-                        </div>
+                    <div class="item">
+                        <a href="{% url 'detail_view_case' case.id %}">
+                            <img class="image" src="{{ case.case_image.url }}" alt="{{ case.case_name }}">
+                        </a>
+                        <p><a href="{% url 'detail_view_case' case.id %}" class="link-title">{{ case.case_name }}</a></p>
+                        <p>Price: {{ case.case_price }}₴</p>
+                    </div>
                 {% endfor %}
             </div>
-
         </div>
-
     </div>
 
 {% endblock %}

@@ -2,35 +2,30 @@
 {% load static %}
 
 {% block content %}
+    <link rel="stylesheet" href="{% static 'configuration/list.css' %}">
 
-    <div class="motherboard-list">
-
-        <div>
-
-            <form action="{% url 'list_view_motherboard' %}">
-                <input type="text" name="q" placeholder="Search for motherboard"/>
+    <div class="item-container">
+        <div class="item-details">
+            <form action="{% url 'list_view_motherboard' %}" class="search-form">
+                <input type="text" name="q" placeholder="Search for motherboard" class="search-input"/>
             </form>
 
-            <h3><a href="{% url 'list_view_motherboard' %}">All Motherboards</a></h3>
-
-        </div>
-
-        <div>
+            <h3><a href="{% url 'list_view_motherboard' %}" class="link-title">All Motherboards</a></h3>
 
             <h4>{{ motherboard_count }} Motherboards found</h4>
 
-            <div class="motherboards-container">
+            <div class="items-container">
                 {% for motherboard in motherboard_list %}
-                        <div class="item">
+                    <div class="item">
+                        <a href="{% url 'detail_view_motherboard' motherboard.id %}">
                             <img class="image" src="{{ motherboard.motherboard_image.url }}" alt="{{ motherboard.motherboard_name }}"/>
-                            <p><a href="{% url 'detail_view_motherboard' motherboard.id %}">{{ motherboard.motherboard_name }}</a></p>
-                            <p>Price: {{ motherboard.motherboard_price }}₴</p>
-                        </div>
+                        </a>
+                        <p><a href="{% url 'detail_view_motherboard' motherboard.id %}" class="link-title">{{ motherboard.motherboard_name }}</a></p>
+                        <p>Price: {{ motherboard.motherboard_price }}₴</p>
+                    </div>
                 {% endfor %}
             </div>
-
         </div>
-
     </div>
 
 {% endblock %}

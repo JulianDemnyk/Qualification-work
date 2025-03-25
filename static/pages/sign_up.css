@@ -79,3 +79,35 @@ form a {
 form a:hover {
     color: #ffffff;
 }
+
+.login-redirect, .sign-up-redirect {
+    background: #2B365E;
+    padding: 20px;
+    border-radius: 6px;
+    text-align: center;
+    margin: 20px auto 0 auto;
+    max-width: 400px;
+    box-sizing: border-box;
+}
+
+.login-redirect p, .sign-up-redirect p {
+    color: #ffffff;
+    margin-top: 10px;
+    font-family: 'Helvetica', sans-serif;
+}
+
+.login-redirect a, .sign-up-redirect a {
+    display: inline-block;
+    background: #ffffff;
+    color: #2B365E;
+    padding: 10px 0px;
+    width: 100%;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.login-redirect a:hover, .sign-up-redirect a:hover {
+    background: #ffffff;
+}

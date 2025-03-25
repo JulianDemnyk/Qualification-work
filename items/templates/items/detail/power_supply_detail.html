@@ -1,16 +1,26 @@
 {% extends "pages/base.html" %}
+{% load static %}
 
 {% block content %}
+    <link rel="stylesheet" href="{% static 'configuration/detail.css' %}">
 
-    <div class="container">
-        <h1>{{ power_supply.power_supply_name }}</h1>
+<div class="item-container">
+    <div class="item-image">
         <img src="{{ power_supply.power_supply_image.url }}" alt="{{ power_supply.power_supply_name }}">
-        <p>Manufacturer: {{ power_supply.power_supply_manufacturer }}</p>
-        <p>Power: {{ power_supply.power_supply_power }} W</p>
-        <p>Form Factor: {{ power_supply.power_supply_form_factor }}</p>
-        <p>Price: {{ power_supply.power_supply_price }}₴</p>
-        <p>Description: {{ power_supply.power_supply_description }}</p>
-        <a href="{% url 'list_view_power_supply' %}">Back to Power Supplies</a>
     </div>
+
+    <div class="item-details">
+        <h1 class="title">{{ power_supply.power_supply_name }}</h1>
+        <p class="info">Manufacturer: {{ power_supply.power_supply_manufacturer }}</p>
+        <p class="info">Power: {{ power_supply.power_supply_power }} W</p>
+        <p class="info">Form Factor: {{ power_supply.power_supply_form_factor }}</p>
+        <p class="info">Price: {{ power_supply.power_supply_price }}₴</p>
+        <p class="info">Description: {{ power_supply.power_supply_description }}</p>
+
+        <div class="back-link">
+            <a href="{% url 'list_view_power_supply' %}" class="button">Back to Power Supplies</a>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

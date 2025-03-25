@@ -1,19 +1,29 @@
 {% extends "pages/base.html" %}
+{% load static %}
 
 {% block content %}
+    <link rel="stylesheet" href="{% static 'configuration/detail.css' %}">
 
-    <div class="container">
-        <h1>{{ gpu.gpu_name }}</h1>
+<div class="item-container">
+    <div class="item-image">
         <img src="{{ gpu.gpu_image.url }}" alt="{{ gpu.gpu_name }}">
-        <p>Manufacturer: {{ gpu.gpu_manufacturer }}</p>
-        <p>Clock Speed: {{ gpu.gpu_clock_speed }}</p>
-        <p>Bus Width (bits): {{ gpu.gpu_bits }}</p>
-        <p>RAM: {{ gpu.gpu_ram }}</p>
-        <p>RAM Type: {{ gpu.gpu_ram_type }}</p>
-        <p>Power Consumption: {{ gpu.gpu_power_consumption }} W</p>
-        <p>Price: {{ gpu.gpu_price }}₴</p>
-        <p>Description: {{ gpu.gpu_description }}</p>
-        <a href="{% url 'list_view_gpu' %}">Back to GPUs</a>
     </div>
+
+    <div class="item-details">
+        <h1 class="title">{{ gpu.gpu_name }}</h1>
+        <p class="info">Manufacturer: {{ gpu.gpu_manufacturer }}</p>
+        <p class="info">Clock speed: {{ gpu.gpu_clock_speed }}</p>
+        <p class="info">Bus width: {{ gpu.gpu_bits }} bits</p>
+        <p class="info">Memory size: {{ gpu.gpu_ram }} GB</p>
+        <p class="info">Memory type: {{ gpu.gpu_ram_type }}</p>
+        <p class="info">Power consumption: {{ gpu.gpu_power_consumption }} W</p>
+        <p class="info">Price: {{ gpu.gpu_price }}₴</p>
+        <p class="info">Description: {{ gpu.gpu_description }}</p>
+
+        <div class="back-link">
+            <a href="{% url 'list_view_gpu' %}" class="button">Back to GPUs</a>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

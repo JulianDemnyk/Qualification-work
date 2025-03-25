@@ -2,35 +2,30 @@
 {% load static %}
 
 {% block content %}
+    <link rel="stylesheet" href="{% static 'configuration/list.css' %}">
 
-    <div class="cooling-system-list">
-
-        <div>
-
-            <form action="{% url 'list_view_cooling_system' %}">
-                <input type="text" name="q" placeholder="Search for cooling system"/>
+    <div class="item-container">
+        <div class="item-details">
+            <form action="{% url 'list_view_cooling_system' %}" class="search-form">
+                <input type="text" name="q" placeholder="Search for cooling system" class="search-input"/>
             </form>
 
-            <h3><a href="{% url 'list_view_cooling_system' %}">All Cooling systems</a></h3>
-
-        </div>
-
-        <div>
+            <h3><a href="{% url 'list_view_cooling_system' %}" class="link-title">All Cooling systems</a></h3>
 
             <h4>{{ cooling_system_count }} Cooling systems found</h4>
 
-            <div class="cooling-systems-container">
+            <div class="items-container">
                 {% for cooling_system in cooling_system_list %}
-                        <div class="item">
-                            <img class="image" src="{{ cooling_system.cooling_system_image.url }}" alt="{{ cooling_system.cooling_system_name }}"/>
-                            <p><a href="{% url 'detail_view_cooling_system' cooling_system.id %}">{{ cooling_system.cooling_system_name }}</a></p>
-                            <p>Price: {{ cooling_system.cooling_system_price }}₴</p>
-                        </div>
+                    <div class="item">
+                        <a href="{% url 'detail_view_cooling_system' cooling_system.id %}">
+                            <img class="image" src="{{ cooling_system.cooling_system_image.url }}" alt="{{ cooling_system.cooling_system_name }}">
+                        </a>
+                        <p><a href="{% url 'detail_view_cooling_system' cooling_system.id %}" class="link-title">{{ cooling_system.cooling_system_name }}</a></p>
+                        <p>Price: {{ cooling_system.cooling_system_price }}₴</p>
+                    </div>
                 {% endfor %}
             </div>
-
         </div>
-
     </div>
 
 {% endblock %}
