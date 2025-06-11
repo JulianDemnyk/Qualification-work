@@ -11,6 +11,7 @@
             </li>
         
             <li><a class="list-link" href="{% url 'compatibility_page' %}">Configuration</a></li>
+            <li><a class="list-link" href="{% url 'list_computer_build' %}">Builds</a></li>
             {% if request.user.is_authenticated %}
                 <li><a class="list-link" href="{% url 'profile' %}">Profile</a></li>
                 <li><a class="list-link" href="{% url 'logout' %}">Logout</a></li>

@@ -15,6 +15,7 @@ class Motherboard_model(models.Model):
     motherboard_form_factor = models.CharField(max_length=10)
     motherboard_price = models.IntegerField()
     motherboard_description = models.TextField(max_length=1500, blank=True)
+    motherboard_featured = models.BooleanField(default=True)
     motherboard_image = models.ImageField(default='fallback.png', blank=True)
 
     def __str__(self):
@@ -23,13 +24,16 @@ class Motherboard_model(models.Model):
 class Cpu_model(models.Model):
     cpu_name = models.TextField(max_length=100)
     cpu_manufacturer = models.TextField(max_length=100)
+    cpu_type = models.TextField(max_length=100)
     cpu_socket = models.TextField(max_length=10)
     cpu_cores = models.IntegerField()
     cpu_threads = models.IntegerField()
     cpu_clock_speed = models.TextField(max_length=10)
     cpu_tdp = models.IntegerField()
+    cpu_power_consumption = models.IntegerField()
     cpu_price = models.IntegerField()
     cpu_description = models.TextField(max_length=1500, blank=True)
+    cpu_featured = models.BooleanField(default=True)
     cpu_image = models.ImageField(default='fallback.png', blank=True)
 
     def __str__(self):
@@ -38,6 +42,7 @@ class Cpu_model(models.Model):
 class Gpu_model(models.Model):
     gpu_name = models.TextField(max_length=100)
     gpu_manufacturer = models.TextField(max_length=100)
+    gpu_chip = models.TextField(max_length=100)
     gpu_clock_speed = models.TextField(max_length=10)
     gpu_bits = models.IntegerField()
     gpu_ram = models.TextField(max_length=10)
@@ -45,6 +50,7 @@ class Gpu_model(models.Model):
     gpu_power_consumption = models.IntegerField()
     gpu_price = models.IntegerField()
     gpu_description = models.TextField(max_length=1500, blank=True)
+    gpu_featured = models.BooleanField(default=True)
     gpu_image = models.ImageField(default='fallback.png', blank=True)
 
     def __str__(self):
@@ -59,6 +65,7 @@ class Ram_model(models.Model):
     ram_amount = models.IntegerField()
     ram_price = models.IntegerField()
     ram_description = models.TextField(max_length=1500, blank=True)
+    ram_featured = models.BooleanField(default=True)
     ram_image = models.ImageField(default='fallback.png', blank=True)
 
     def __str__(self):
@@ -73,6 +80,7 @@ class Storage_model(models.Model):
     storage_connection = models.TextField(max_length=10)
     storage_price = models.IntegerField()
     storage_description = models.TextField(max_length=1500, blank=True)
+    storage_featured = models.BooleanField(default=True)
     storage_image = models.ImageField(default='fallback.png', blank=True)
 
     def __str__(self):
@@ -83,8 +91,10 @@ class Cooling_system_model(models.Model):
     cooling_system_manufacturer = models.TextField(max_length=100)
     cooling_system_socket = models.TextField(max_length=100)
     cooling_system_tdp = models.IntegerField()
-    cooling_system_price =models.IntegerField()
+    cooling_system_type = models.CharField(max_length=10)
+    cooling_system_price = models.IntegerField()
     cooling_system_description = models.TextField(max_length=1500, blank=True)
+    cooling_system_featured = models.BooleanField(default=True)
     cooling_system_image = models.ImageField(default='fallback.png', blank=True)
 
     def __str__(self):
@@ -97,6 +107,7 @@ class Power_supply_model(models.Model):
     power_supply_form_factor = models.CharField(max_length=10)
     power_supply_price = models.IntegerField()
     power_supply_description = models.TextField(max_length=1500, blank=True)
+    power_supply_featured = models.BooleanField(default=True)
     power_supply_image = models.ImageField(default='fallback.png', blank=True)
 
     def __str__(self):
@@ -111,12 +122,14 @@ class Case_model(models.Model):
     case_fan = models.IntegerField()
     case_price = models.IntegerField()
     case_description = models.TextField(max_length=1500, blank=True)
+    case_featured = models.BooleanField(default=True)
     case_image = models.ImageField(default='fallback.png', blank=True)
 
     def __str__(self):
         return self.case_name
 
 class Computer_build(models.Model):
+    build_name = models.TextField(max_length=30)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     cpu = models.ForeignKey(Cpu_model, on_delete=models.CASCADE)
     motherboard = models.ForeignKey(Motherboard_model, on_delete=models.CASCADE)
@@ -126,4 +139,9 @@ class Computer_build(models.Model):
     cooling_system = models.ForeignKey(Cooling_system_model, on_delete=models.CASCADE)
     power_supply = models.ForeignKey(Power_supply_model, on_delete=models.CASCADE)
     case = models.ForeignKey(Case_model, on_delete=models.CASCADE)
+    featured = models.BooleanField(default=True)
     price = models.IntegerField()
+
+    def __str__(self):
+        return self.build_name
+

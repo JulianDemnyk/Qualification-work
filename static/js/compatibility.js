@@ -26,7 +26,7 @@ function fetchComponents() {
         data: data,
         success: function (response) {
             updateComponentList('cpu', response.cpus);
-            updateComponentList('motherboard', response.motherboards); // Ensure this is updated
+            updateComponentList('motherboard', response.motherboards);
             updateComponentList('ram', response.rams);
             updateComponentList('cooling_system', response.cooling_systems);
             updateComponentList('gpu', response.gpus);
@@ -57,11 +57,13 @@ function updateComponentList(type, components) {
     listContainer.empty();
 
     if (components.length === 0) {
-        listContainer.append('<p>No compatible items found.</p>');
+        listContainer.append('<p>No compatible components found.</p>');
         return;
     }
 
     components.forEach((item) => {
+        if (!item.featured) return;
+
         const isActive =
             (type === 'cpu' && item.id === selectedCPU) ||
             (type === 'motherboard' && item.id === selectedMotherboard) ||
@@ -74,12 +76,19 @@ function updateComponentList(type, components) {
 
         const html = `
             <div class="component-item ${isActive ? 'active' : ''}" data-id="${item.id}" data-type="${type}" data-price="${item.price}">
-                <img src="${item.image_url}" alt="${item.name}">
-                <h3>${item.name}</h3>
-                <p>Price: ${item.price}₴</p>
-                
-                <div class="component-item-view">
-                    <a href="/${type}s/${item.id}/">More details</a>
+                <div class="table-scroll">
+                    <table>
+                        <tr>
+                            <td>
+                                <img src="${item.image_url}" alt="${item.name}" width="100">
+                                <h3>${item.name}</h3>
+                                <p>Price: ${item.price}₴</p>
+                                <div class="component-item-view">
+                                    <a href="/${type}s/${item.id}/">More details</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         `;
@@ -104,7 +113,6 @@ function selectComponent(element, type) {
     const id = $(element).data('id');
     const price = parseInt($(element).data('price'));
 
-    // Toggle selection
     if ($(element).hasClass('active')) {
         $(element).removeClass('active');
         if (type === 'cpu') {
@@ -165,23 +173,44 @@ $(document).on('click', '.component-item', function () {
 $(document).ready(function () {
     fetchComponents();
 });
+я
+$(document).on('input', '.component-search', function () {
+    const value = $(this).val().toLowerCase();
+    const targetId = $(this).data('target');
+    const $list = $('#' + targetId);
+
+    if (!$list.length) return;
+
+    $list.find('.component-item').each(function () {
+        const name = $(this).find('h3').text().toLowerCase();
+        $(this).toggle(name.includes(value));
+    });
+});
 
 function saveBuild() {
+    const buildName = prompt("Enter a name for your build:");
+
+    if (!buildName) {
+        alert("Build name is required.");
+        return prompt("Enter a name for your build:");
+    }
+
     const data = {
-        cpu: selectedCPU,
-        motherboard: selectedMotherboard,
-        gpu: selectedGPU,
-        ram: selectedRAM,
-        storage: selectedStorage,
-        cooling_system: selectedCoolingSystem,
-        power_supply: selectedPowerSupply,
-        case: selectedCase
+        cpu: selectedCPU, motherboard: selectedMotherboard, gpu: selectedGPU, ram: selectedRAM,
+        storage: selectedStorage, cooling_system: selectedCoolingSystem, power_supply: selectedPowerSupply,
+        case: selectedCase, build_name: buildName
     };
+
+    const serializedData = $.param(data);
+
+    function getCSRFToken() {
+    return document.cookie.split('; ').find(row => row.startsWith('csrftoken=')) ?.split('=')[1];
+    }
 
     $.ajax({
         url: '/save_computer_build/',
         type: 'POST',
-        data: data,
+        data: serializedData,
         headers: { "X-CSRFToken": getCSRFToken() },
         success: function(response) {
             if (response.status === 'success') {
@@ -196,8 +225,3 @@ function saveBuild() {
     });
 }
 
-function getCSRFToken() {
-    return document.cookie.split('; ')
-        .find(row => row.startsWith('csrftoken='))
-        ?.split('=')[1];
-}

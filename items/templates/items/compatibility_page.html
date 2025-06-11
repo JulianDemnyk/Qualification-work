@@ -7,69 +7,79 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{% static 'js/compatibility.js' %}"></script>
 
-    <h1 class="page-name">Start configuring your computer</h1>
+    <div class="compatibility">
+        <h1 class="page-name">Start configuring your computer</h1>
 
-    <div class="select-item">
-        <h2>Select Processor</h2>
-        <p class="list-view-item"><a href="{% url 'list_view_cpu' %}">View more Processors</a></p>
-        <div id="cpu-list" class="component-list">
+        <div class="select-item">
+            <h2>Select Processor</h2>
+            <p class="list-view-item"><a href="{% url 'list_view_cpu' %}">View more Processors</a></p>
+            <input type="text" class="component-search" placeholder="Search for processor" data-target="cpu-list">
+            <div id="cpu-list" class="component-list">
+            </div>
+        </div>
+
+        <div class="select-item">
+            <h2>Select Motherboard</h2>
+            <p class="list-view-item"><a href="{% url 'list_view_motherboard' %}">View more Motherboards</a></p>
+            <input type="text" class="component-search" placeholder="Search for motherboard" data-target="motherboard-list">
+            <div id="motherboard-list" class="component-list">
+            </div>
+        </div>
+
+        <div class="select-item">
+            <h2>Select Graphics card</h2>
+            <p class="list-view-item"><a href="{% url 'list_view_gpu' %}">View more Graphic card</a></p>
+            <input type="text" class="component-search" placeholder="Search for graphic card" data-target="gpu-list">
+            <div id="gpu-list" class="component-list">
+            </div>
+        </div>
+
+        <div class="select-item">
+            <h2>Select Memory</h2>
+            <p class="list-view-item"><a href="{% url 'list_view_ram' %}">View more Memory modules</a></p>
+            <input type="text" class="component-search" placeholder="Search for memory" data-target="ram-list">
+            <div id="ram-list" class="component-list">
+            </div>
+        </div>
+
+        <div class="select-item">
+            <h2>Select Cooling system</h2>
+            <p class="list-view-item"><a href="{% url 'list_view_cooling_system' %}">View more Cooling systems</a></p>
+            <input type="text" class="component-search" placeholder="Search for cooling system" data-target="cooling-system-list">
+            <div id="cooling-system-list" class="component-list">
+            </div>
+        </div>
+
+        <div class="select-item">
+            <h2>Select Power supply</h2>
+            <p class="list-view-item"><a href="{% url 'list_view_power_supply' %}">View more Power supplys</a></p>
+            <input type="text" class="component-search" placeholder="Search for power supply" data-target="power-supply-list">
+            <div id="power-supply-list" class="component-list">
+            </div>
+        </div>
+
+        <div class="select-item">
+            <h2>Select Storage</h2>
+            <p class="list-view-item"><a href="{% url 'list_view_storage' %}">View more Storages</a></p>
+            <input type="text" class="component-search" placeholder="Search for storage" data-target="storage-list">
+            <div id="storage-list" class="component-list">
+            </div>
+        </div>
+
+        <div class="select-item">
+            <h2>Select Case</h2>
+            <p class="list-view-item"><a href="{% url 'list_view_case' %}">View more Cases</a></p>
+            <input type="text" class="component-search" placeholder="Search for case" data-target="case-list">
+            <div id="case-list" class="component-list">
+            </div>
         </div>
     </div>
 
-    <div class="select-item">
-        <h2>Select Motherboard</h2>
-        <p class="list-view-item"><a href="{% url 'list_view_motherboard' %}">View more Motherboards</a></p>
-        <div id="motherboard-list" class="component-list">
-        </div>
-    </div>
-    
-    <div class="select-item">
-        <h2>Select Graphics card</h2>
-        <p class="list-view-item"><a href="{% url 'list_view_gpu' %}">View more Graphic card</a></p>
-        <div id="gpu-list" class="component-list">
-        </div>
-    </div>
-
-    <div class="select-item">
-        <h2>Select Memory</h2>
-        <p class="list-view-item"><a href="{% url 'list_view_ram' %}">View more Memory modules</a></p>
-        <div id="ram-list" class="component-list">
-        </div>
-    </div>
-
-    <div class="select-item">
-        <h2>Select Cooling system</h2>
-        <p class="list-view-item"><a href="{% url 'list_view_cooling_system' %}">View more Cooling systems</a></p>
-        <div id="cooling-system-list" class="component-list">
-        </div>
-    </div>
-    
-    <div class="select-item">
-        <h2>Select Power supply</h2>
-        <p class="list-view-item"><a href="{% url 'list_view_power_supply' %}">View more Power supplys</a></p>
-        <div id="power-supply-list" class="component-list">
-        </div>
-    </div>
-
-    <div class="select-item">
-        <h2>Select Storage</h2>
-        <p class="list-view-item"><a href="{% url 'list_view_storage' %}">View more Storages</a></p>
-        <div id="storage-list" class="component-list">
-        </div>
-    </div>
-
-    <div class="select-item">
-        <h2>Select Case</h2>
-        <p class="list-view-item"><a href="{% url 'list_view_case' %}">View more Cases</a></p>
-        <div id="case-list" class="component-list">
-        </div>
-    </div>
-    
     <div class="selected-component">
         <h3>Selected Processors: <span id="selected-cpu">None</span></h3>
         <h3>Selected Motherboard: <span id="selected-motherboard">None</span></h3>
         <h3>Selected Graphics card: <span id="selected-gpu">None</span></h3>
-        <h3>Selected Memory <span id="selected-ram">None</span></h3>
+        <h3>Selected Memory: <span id="selected-ram">None</span></h3>
         <h3>Selected Cooling system: <span id="selected-cooling-system">None</span></h3>
         <h3>Selected Power supply: <span id="selected-power-supply">None</span></h3>
         <h3>Selected Storage: <span id="selected-storage">None</span></h3>

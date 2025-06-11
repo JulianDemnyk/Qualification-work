@@ -3,34 +3,44 @@
 
 {% block content %}
     <link rel="stylesheet" href="{% static 'configuration/list.css' %}">
+    <script src="{% static 'js/filters.js' %}"></script>
 
     <div class="item-container">
         <div class="item-details">
             <h1 class="profile-name">{{ request.user.username }}'s Profile</h1>
-
-            <form action="{% url 'profile' %}" class="search-form">
-                <input type="text" name="q" placeholder="Search for computer build" class="search-input"/>
-            </form>
-
-            <h3><a href="{% url 'profile' %}" class="link-title">All Builds</a></h3>
-
-            <h4>{{ builds_count }} Builds found</h4>
-
+        <form method="get">
+            <div id="filters">
+                {{ filter.form }}
+                <button type="submit">Apply Filters</button>
+            </div>
+            <button type="button" id="toggle-filters-btn">Toggle Filters</button>
+        </form>
+        <h3><a href="{% url 'list_computer_build' %}" class="link-title">All Builds</a></h3>
+        <h4>{{ builds_count }} Builds found</h4>
             <div class="items-container">
                 {% if builds %}
                     {% for build in builds %}
-                        <div class="item">
-                            <a href="{% url 'detail_view_build' build.id %}">
-                                <img class="image" src="{{ build.case.case_image.url }}" alt="{{ build.case.case_name }}">
-                            </a>
-                            <p><a href="{% url 'detail_view_build' build.id %}" class="link-title">{{ build.case.case_name }}</a></p>
-                            <p>Total Price: ${{ build.price }}</p>
-                        </div>
+                        {% if build.owner == request.user %}
+                            <div class="item">
+                                <a href="{% url 'profile_build' build.id %}">
+                                    <img class="image" src="{{ build.case.case_image.url }}" alt="{{ build.case.case_name }}">
+                                </a>
+                                <p><a href="{% url 'profile_build' build.id %}" class="link-title">{{ build.build_name }}</a></p>
+                                <p>Total Price: {{ build.price }}₴</p>
+                            </div>
+                        {% endif %}
                     {% endfor %}
                 {% else %}
-                    <p>You have no saved builds yet.</p>
+                    <div class="message">
+                        <p>No builds were found.</p>
+                        <p>Want to view <a href="{% url 'profile' %}" class="link-title">all builds?</a></p>
+                        <p>Or use <a href="{% url 'profile' %}" class="link-title">configurator</a> to make a new one?</p>
+                    </div>
                 {% endif %}
             </div>
+            <script>
+                document.getElementById('toggle-filters-btn').addEventListener('click', filtersToggle)
+            </script>
         </div>
     </div>
 

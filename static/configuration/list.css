@@ -1,3 +1,7 @@
+h1 {
+    color: #2B365E;
+}
+
 .item-container {
     display: flex;
     flex-direction: column;
@@ -12,8 +16,7 @@
     width: 100%;
     padding: 20px;
     background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
     margin: 0;
 }
 
@@ -69,25 +72,26 @@ h4 {
 
 .item {
     background-color: #ffffff;
-    border-radius: 8px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
     padding: 15px;
     text-align: left;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s;
     width: auto;
     max-width: 350px;
     margin: 0 auto;
 }
 
 .item:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(-5px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .item img {
     width: 250px;
     height: 250px;
     object-fit: cover;
-    border-radius: 8px;
+    border-radius: 10px;
     margin-bottom: 15px;
 }
 
@@ -100,4 +104,9 @@ h4 {
 .item p:last-child {
     font-weight: bold;
     color: #30343F;
+}
+
+
+.filters {
+    display: none;
 }

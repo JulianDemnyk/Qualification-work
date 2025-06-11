@@ -20,6 +20,11 @@ body {
     color: #FAFAFF;
     margin: 0;
     font-size: 24px;
+    transition: ease-in 90ms;
+}
+
+.temp-logo-text:hover {
+    font-size: 25px;
 }
 
 .temp-logo-text a {

@@ -2,16 +2,21 @@
 {% load static %}
 
 {% block content %}
+
     <link rel="stylesheet" href="{% static 'configuration/list.css' %}">
+    <script src="{% static 'js/filters.js' %}"></script>
 
     <div class="item-container">
         <div class="item-details">
-            <form action="{% url 'list_view_gpu' %}" class="search-form">
-                <input type="text" name="q" placeholder="Search for graphic card" class="search-input"/>
+            <form method="get">
+                <div id="filters">
+                    {{ filter.form }}
+                    <button type="submit">Apply Filters</button>
+                </div>
+                <button type="button" id="toggle-filters-btn">Toggle Filters</button>
             </form>
 
             <h3><a href="{% url 'list_view_gpu' %}" class="link-title">All Graphic cards</a></h3>
-
             <h4>{{ gpu_count }} Graphic cards found</h4>
 
             <div class="items-container">
@@ -25,6 +30,10 @@
                     </div>
                 {% endfor %}
             </div>
+
+            <script>
+                document.getElementById('toggle-filters-btn').addEventListener('click', filtersToggle)
+            </script>
         </div>
     </div>
 

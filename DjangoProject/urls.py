@@ -1,7 +1,7 @@
 """
 URL configuration for DjangoProject project.
 
-The `urlpatterns` list routes URLs to views. For more information please see:
+The `urlpatterns` items_list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.1/topics/http/urls/
 Examples:
 Function views
@@ -19,11 +19,13 @@ from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
 from items import views
+
 urlpatterns = [
         path('admin/', admin.site.urls),
         path('', views.home_view, name='home'),
 
         path('profile/', views.user_profile, name='profile'),
+        path('profile/build/<int:id>', views.detail_view_build_profile  , name='profile_build'),
         path('login/', views.login_page, name='login'),
         path('sign_up/', views.sign_up_page, name='sign_up'),
         path('logout/', views.logout_page, name='logout'),
@@ -32,7 +34,9 @@ urlpatterns = [
         path('save_computer_build/', views.save_computer_build, name='save_computer_build'),
         path('get_compatible_components/', views.get_compatible_components, name='get_compatible_components'),
 
+        path('builds/', views.list_view_computer_build, name='list_computer_build'),
         path('builds/<int:id>/', views.detail_view_build, name='detail_view_build'),
+        path('builds/<int:id>/delete', views.delete_view_computer_build, name='delete_view_computer_build'),
 
         path('cpus/<int:id>/', views.detail_view_cpu, name='detail_view_cpu'),
         path('cpus/', views.list_view_cpu, name='list_view_cpu'),

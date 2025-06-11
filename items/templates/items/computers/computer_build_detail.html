@@ -3,11 +3,11 @@
 
 {% block content %}
 
-<link rel="stylesheet" href="{% static 'configuration/detail_build.css' %}">
+    <link rel="stylesheet" href="{% static 'configuration/detail_build.css' %}">
 
     <div class="build-detail">
 
-        <h1 class="title">Build Details</h1>
+        <h1 class="title">{{ build.build_name }}</h1>
         <p class="info total-price">Total Price: {{ build.price }}₴</p>
 
         <div class="components-container">
@@ -109,7 +109,11 @@
         </div>
 
         <div class="back-link">
-            <a href="{% url 'profile' %}" class="button">Back to Profile</a>
+                <a href="../" class="button">Back to builds</a>
+            {% if build.owner == request.user or request.user.is_superuser %}
+                <p style="font-size: 10px; color: white">A</p>
+                <a href="{% url 'delete_view_computer_build' build.id %}" class="button">Delete build</a>
+            {% endif %}
         </div>
 
     </div>

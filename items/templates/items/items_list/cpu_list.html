@@ -2,12 +2,18 @@
 {% load static %}
 
 {% block content %}
+
     <link rel="stylesheet" href="{% static 'configuration/list.css' %}">
+    <script src="{% static 'js/filters.js' %}"></script>
 
     <div class="item-container">
         <div class="item-details">
-            <form action="{% url 'list_view_cpu' %}" class="search-form">
-                <input type="text" name="q" placeholder="Search for processor" class="search-input"/>
+            <form method="get">
+                <div id="filters">
+                    {{ filter.form }}
+                    <button type="submit">Apply Filters</button>
+                </div>
+                <button type="button" id="toggle-filters-btn">Toggle Filters</button>
             </form>
 
             <h3><a href="{% url 'list_view_cpu' %}" class="link-title">All Processors</a></h3>
@@ -25,6 +31,10 @@
                     </div>
                 {% endfor %}
             </div>
+
+            <script>
+                document.getElementById('toggle-filters-btn').addEventListener('click', filtersToggle)
+            </script>
         </div>
     </div>
 

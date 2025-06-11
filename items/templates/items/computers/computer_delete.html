@@ -1,0 +1,17 @@
+{% extends "pages/base.html" %}
+{% load static %}
+
+{% block content %}
+
+    <link rel="stylesheet" href="{% static 'computer_delete.html' %}">
+
+    <div class="item-delete-block">
+        <form class="item-delete" method='POST'>
+            {% csrf_token %}
+            <p class="confirm-delete">Are u sure u want to delete this computer build "{{ build.build_name }}"?</p>
+            <button class="submit-button" type="submit">Submit</button>
+            <a class="rollback-button" href='..'>Cancel</a>
+        </form>
+    </div>
+
+{% endblock %}
